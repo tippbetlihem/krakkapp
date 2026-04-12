@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+:root {
+  /* Navy (Primary) */
+  --navy-50: #EAECF3;
+  --navy-100: #C8CCE0;
+  --navy-200: #A3AACA;
+  --navy-300: #7D87B4;
+  --navy-400: #4E5B8E;
+  --navy-500: #1F2E6C;
+  --navy-600: #1B2860;
+  --navy-700: #162152;
+  --navy-800: #111A42;
+  --navy-900: #0C1230;
+
+  /* Gold */
+  --gold-50: #FFFDE7;
+  --gold-100: #FFF8C4;
+  --gold-200: #FFF09D;
+  --gold-300: #FFE876;
+  --gold-400: #FAD707;
+  --gold-500: #D0A51D;
+  --gold-600: #B08A15;
+  --gold-700: #8A6B10;
+  --gold-800: #6B520C;
+  --gold-900: #4A3808;
+
+  /* Brown */
+  --brown-50: #F5EDE7;
+  --brown-100: #E6D5C7;
+  --brown-200: #D2B8A1;
+  --brown-300: #BB9677;
+  --brown-400: #9A7050;
+  --brown-500: #734A27;
+  --brown-600: #634020;
+  --brown-700: #51341A;
+  --brown-800: #3F2813;
+  --brown-900: #2D1C0D;
+
+  /* Neutrals (warm) */
+  --neutral-50: #FAFAF9;
+  --neutral-100: #F3F2F0;
+  --neutral-200: #E5E4E1;
+  --neutral-300: #D1D0CC;
+  --neutral-400: #A3A29D;
+  --neutral-500: #73726D;
+  --neutral-600: #54534F;
+  --neutral-700: #3D3C39;
+  --neutral-800: #272624;
+  --neutral-900: #1A1918;
+
+  /* Status */
+  --success: #10B981;
+  --success-light: #ECFDF5;
+  --error: #EF4444;
+  --error-light: #FEF2F2;
+  --info: #0EA5E9;
+  --info-light: #F0F9FF;
+}
+
+@theme inline {
+  /* Navy */
+  --color-navy-50: var(--navy-50);
+  --color-navy-100: var(--navy-100);
+  --color-navy-200: var(--navy-200);
+  --color-navy-300: var(--navy-300);
+  --color-navy-400: var(--navy-400);
+  --color-navy-500: var(--navy-500);
+  --color-navy-600: var(--navy-600);
+  --color-navy-700: var(--navy-700);
+  --color-navy-800: var(--navy-800);
+  --color-navy-900: var(--navy-900);
+
+  /* Gold */
+  --color-gold-50: var(--gold-50);
+  --color-gold-100: var(--gold-100);
+  --color-gold-200: var(--gold-200);
+  --color-gold-300: var(--gold-300);
+  --color-gold-400: var(--gold-400);
+  --color-gold-500: var(--gold-500);
+  --color-gold-600: var(--gold-600);
+  --color-gold-700: var(--gold-700);
+  --color-gold-800: var(--gold-800);
+  --color-gold-900: var(--gold-900);
+
+  /* Brown */
+  --color-brown-50: var(--brown-50);
+  --color-brown-100: var(--brown-100);
+  --color-brown-200: var(--brown-200);
+  --color-brown-300: var(--brown-300);
+  --color-brown-400: var(--brown-400);
+  --color-brown-500: var(--brown-500);
+  --color-brown-600: var(--brown-600);
+  --color-brown-700: var(--brown-700);
+  --color-brown-800: var(--brown-800);
+  --color-brown-900: var(--brown-900);
+
+  /* Neutrals */
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+
+  /* Status */
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-error: var(--error);
+  --color-error-light: var(--error-light);
+  --color-info: var(--info);
+  --color-info-light: var(--info-light);
+  --color-warning: var(--gold-500);
+  --color-warning-light: var(--gold-50);
+
+  /* Font */
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--neutral-50);
+  color: var(--neutral-700);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+}
