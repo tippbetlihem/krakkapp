@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrakkApp – Dashboard Tillögur (Fresh and Bright)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+        :root{
+            /* Evergreen Mist (primary — áður „navy“) */
+            --navy-50:#E8EFEC;--navy-100:#D0DDD7;--navy-200:#B0C7BC;--navy-300:#7A9E8C;
+            --navy-400:#4D6B5E;--navy-500:#324F44;--navy-600:#2A4239;--navy-900:#1A2822;
+            /* Golden Sun */
+            --gold-50:#FFFBEB;--gold-100:#FFF4D4;--gold-200:#FFE99F;--gold-300:#FFE066;
+            --gold-400:#FFD746;--gold-500:#D4B435;--gold-700:#6B5420;
+            /* Hlýr „brown“ → Soft Blush + citrus (Lestur / hlýjar kaflar) */
+            --brown-50:#F6E1DE;--brown-100:#EECBC4;--brown-300:#FFB366;--brown-500:#B86A18;
+            --success:#2D6A4F;--success-light:#D9E8C1;--error:#C64632;--error-light:#FDEEEB;
+            --info:#3D7A8C;--info-light:#E8F4F7;
+            --n50:#F3EFE6;--n100:#EBE6DC;--n200:#D9D4C9;--n300:#C4BFB3;
+            --n400:#9E9A90;--n500:#6E6A62;--n700:#3D3C39;--n900:#1A1918;
+        }
+        body{font-family:'Inter',system-ui,sans-serif;background:var(--n50);color:var(--n700);line-height:1.5;}
+
+        /* Page layout */
+        .page-title{text-align:center;padding:40px 20px 20px;font-size:28px;font-weight:800;color:var(--navy-500);}
+        .page-subtitle{text-align:center;color:var(--n500);font-size:14px;margin-bottom:40px;}
+        .section-label{
+            text-align:center;font-size:12px;font-weight:700;text-transform:uppercase;
+            letter-spacing:.08em;padding:12px 20px;margin:40px auto 20px;width:fit-content;
+            border-radius:99px;
+        }
+
+        /* ══════ PARENT DASHBOARD ══════ */
+        .parent-frame{
+            max-width:900px;margin:0 auto 60px;background:var(--n50);
+            border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.08);
+        }
+        .parent-header{
+            background:var(--navy-500);color:white;padding:16px 24px;
+            display:flex;justify-content:space-between;align-items:center;
+        }
+        .parent-header .logo{font-weight:800;font-size:18px;}
+        .parent-header .logo span{color:var(--gold-400);}
+        .parent-header .user{font-size:13px;opacity:.8;}
+        .parent-body{display:flex;min-height:600px;}
+        .parent-sidebar{
+            width:200px;background:var(--n100);border-right:1px solid var(--n200);
+            padding:20px 12px;flex-shrink:0;
+        }
+        .parent-sidebar a{
+            display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;
+            font-size:13px;font-weight:500;color:var(--n500);text-decoration:none;margin-bottom:4px;
+        }
+        .parent-sidebar a.active{background:var(--navy-50);color:var(--navy-500);font-weight:600;}
+        .parent-main{flex:1;padding:28px;overflow-y:auto;}
+
+        /* Parent greeting */
+        .greeting{margin-bottom:24px;}
+        .greeting h1{font-size:22px;font-weight:700;color:var(--n900);}
+        .greeting p{font-size:13px;color:var(--n500);margin-top:2px;}
+
+        /* Stat row */
+        .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+        .stat-card{
+            border-radius:20px;padding:20px;position:relative;overflow:hidden;
+        }
+        .stat-card .blob{
+            position:absolute;width:80px;height:80px;border-radius:50%;opacity:.3;
+            top:-20px;right:-20px;
+        }
+        .stat-card .icon-circle{
+            width:40px;height:40px;border-radius:12px;display:flex;align-items:center;
+            justify-content:center;font-size:11px;font-weight:800;letter-spacing:.04em;margin-bottom:12px;
+        }
+        .stat-card .value{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;}
+        .stat-card .label{font-size:12px;font-weight:500;margin-top:2px;}
+
+        /* Child cards */
+        .child-section-title{font-size:16px;font-weight:700;color:var(--n900);margin-bottom:16px;}
+        .child-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+        .child-card{
+            background:white;border-radius:20px;padding:24px;
+            box-shadow:0 2px 8px rgba(0,0,0,.04);
+        }
+        .child-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+        .child-card-name{font-size:16px;font-weight:700;color:var(--n900);}
+        .child-card-badge{
+            font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;
+            background:var(--success-light);color:var(--navy-500);
+        }
+        .child-card .mini-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;}
+        .child-card .mini-stat{text-align:center;}
+        .child-card .mini-stat .val{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;}
+        .child-card .mini-stat .lbl{font-size:11px;color:var(--n500);}
+
+        /* Circular progress */
+        .circular-wrap{display:flex;align-items:center;gap:16px;padding:12px 0;}
+        .circular-progress{position:relative;width:64px;height:64px;flex-shrink:0;}
+        .circular-progress svg{transform:rotate(-90deg);}
+        .circular-progress .track{fill:none;stroke:var(--n200);stroke-width:6;}
+        .circular-progress .fill{fill:none;stroke-width:6;stroke-linecap:round;}
+        .circular-progress .center-text{
+            position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+            font-size:15px;font-weight:700;
+        }
+        .circular-info .title{font-size:13px;font-weight:600;color:var(--n700);}
+        .circular-info .sub{font-size:11px;color:var(--n500);}
+
+        /* Wave SVG */
+        .wave-section{position:relative;}
+        .wave-svg{display:block;width:100%;}
+
+        /* ══════ CHILD DASHBOARD ══════ */
+        .child-frame{
+            max-width:390px;margin:0 auto 60px;background:var(--gold-50);
+            border-radius:32px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.1);
+            position:relative;
+        }
+        .child-hero{
+            padding:32px 24px 40px;text-align:center;position:relative;overflow:hidden;
+        }
+        .child-hero .blob1{
+            position:absolute;width:200px;height:200px;border-radius:50%;
+            background:var(--gold-200);opacity:.4;top:-60px;right:-40px;
+        }
+        .child-hero .blob2{
+            position:absolute;width:140px;height:140px;border-radius:50%;
+            background:var(--navy-100);opacity:.3;bottom:-30px;left:-30px;
+        }
+        .child-hero .content{position:relative;z-index:1;}
+        .child-hero .avatar{
+            width:72px;height:72px;border-radius:50%;
+            background:var(--gold-100);border:3px solid white;
+            margin:0 auto 12px;display:flex;align-items:center;justify-content:center;
+            font-size:15px;font-weight:800;color:var(--n700);letter-spacing:.02em;
+            box-shadow:0 4px 12px rgba(0,0,0,.08);
+        }
+        .child-hero .greeting-text{font-size:18px;font-weight:600;color:var(--n700);}
+        .child-hero .points-big{font-size:52px;font-weight:800;color:var(--gold-500);font-variant-numeric:tabular-nums;line-height:1;}
+        .child-hero .points-label{font-size:14px;color:var(--n500);margin-top:4px;}
+        .child-hero .badges{display:flex;justify-content:center;gap:8px;margin-top:16px;}
+        .child-hero .badge{
+            display:flex;align-items:center;gap:4px;padding:6px 14px;border-radius:99px;
+            font-size:13px;font-weight:600;background:white;box-shadow:0 2px 8px rgba(0,0,0,.06);
+        }
+
+        /* Wave between hero and content */
+        .child-wave{position:relative;margin-top:-20px;z-index:2;}
+        .child-wave svg{display:block;width:100%;}
+
+        .child-content{padding:0 20px 100px;position:relative;z-index:3;background:white;margin-top:-2px;}
+
+        /* Activity cards */
+        .activity-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+        .activity-card{
+            border-radius:20px;padding:20px 16px;text-align:center;
+            position:relative;overflow:hidden;cursor:pointer;
+            transition:transform .15s,box-shadow .15s;
+        }
+        .activity-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08);}
+        .activity-card .card-blob{
+            position:absolute;width:60px;height:60px;border-radius:50%;opacity:.2;
+            bottom:-10px;right:-10px;
+        }
+        .activity-card .card-icon{
+            width:48px;height:48px;border-radius:16px;display:flex;align-items:center;
+            justify-content:center;font-size:13px;font-weight:800;letter-spacing:.02em;margin:0 auto 10px;
+        }
+        .activity-card .card-title{font-size:14px;font-weight:700;color:var(--n900);}
+        .activity-card .card-sub{font-size:11px;color:var(--n500);margin-top:2px;}
+
+        /* Progress section */
+        .section-title-child{font-size:16px;font-weight:700;color:var(--n900);margin-bottom:14px;}
+
+        .progress-card{
+            background:var(--n50);border-radius:20px;padding:20px;margin-bottom:16px;
+        }
+        .progress-row{display:flex;align-items:center;gap:16px;}
+        .progress-bar-wrap{flex:1;}
+        .progress-bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;}
+        .progress-bar-track{height:10px;background:var(--n200);border-radius:99px;overflow:hidden;}
+        .progress-bar-fill{height:100%;border-radius:99px;transition:width .5s;}
+
+        /* Bottom nav */
+        .child-bottom-nav{
+            position:absolute;bottom:0;left:0;right:0;background:white;
+            border-top:1px solid var(--n200);display:flex;padding:8px 0 12px;
+        }
+        .child-bottom-nav .tab{
+            flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+            font-size:10px;font-weight:600;color:var(--n400);padding-top:4px;
+            border-top:2px solid transparent;
+        }
+        .child-bottom-nav .tab.active{color:var(--navy-500);border-top-color:var(--gold-400);}
+        .child-bottom-nav .tab .tab-icon{font-size:11px;font-weight:800;letter-spacing:.04em;color:inherit;}
+
+        /* ══════ LOGIN TILLAGA — FULLSCREEN SPLIT ══════ */
+        .login-fullscreen{
+            max-width:1100px;margin:0 auto 60px;min-height:640px;
+            display:grid;grid-template-columns:1fr 1fr;
+            border-radius:32px;overflow:hidden;
+            box-shadow:0 12px 50px rgba(0,0,0,.12);
+        }
+        @media(max-width:768px){
+            .login-fullscreen{grid-template-columns:1fr;max-width:480px;}
+            .login-left{min-height:280px;}
+        }
+
+        /* Left panel — navy + animated blobs */
+        .login-left{
+            background:linear-gradient(160deg,var(--navy-500) 0%,var(--navy-900) 100%);
+            position:relative;overflow:hidden;display:flex;flex-direction:column;
+            justify-content:center;align-items:center;padding:60px 48px;text-align:center;
+        }
+        .login-left .lb{position:absolute;border-radius:50%;}
+        .login-left .lb1{
+            width:300px;height:300px;background:var(--gold-400);opacity:.1;
+            top:-80px;left:-80px;animation:float1 8s ease-in-out infinite;
+        }
+        .login-left .lb2{
+            width:220px;height:220px;background:var(--gold-300);opacity:.08;
+            bottom:-60px;right:-40px;animation:float2 10s ease-in-out infinite;
+        }
+        .login-left .lb3{
+            width:160px;height:160px;background:var(--brown-300);opacity:.1;
+            top:50%;right:10%;animation:float3 12s ease-in-out infinite;
+        }
+        .login-left .lb4{
+            width:100px;height:100px;background:var(--gold-200);opacity:.07;
+            bottom:20%;left:15%;animation:float2 9s ease-in-out infinite reverse;
+        }
+        .login-left .lb5{
+            width:80px;height:80px;background:var(--info);opacity:.06;
+            top:20%;right:30%;animation:float1 7s ease-in-out infinite reverse;
+        }
+        @keyframes float1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(20px,-30px) scale(1.05);}}
+        @keyframes float2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-15px,25px) scale(1.08);}}
+        @keyframes float3{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(10px,15px) scale(0.95);}}
+
+        .login-left-content{position:relative;z-index:1;}
+        .login-left h1{font-size:42px;font-weight:800;color:white;line-height:1.1;margin-bottom:8px;}
+        .login-left h1 span{color:var(--gold-400);}
+        .login-left .tagline{color:var(--navy-200);font-size:15px;line-height:1.5;margin-bottom:32px;}
+
+        .login-features{display:flex;flex-direction:column;gap:14px;text-align:left;}
+        .login-feature{
+            display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.8);font-size:14px;
+        }
+        .login-feature .feat-icon{
+            width:40px;height:40px;border-radius:12px;display:flex;align-items:center;
+            justify-content:center;font-size:11px;font-weight:800;letter-spacing:.03em;
+            background:rgba(255,255,255,.12);flex-shrink:0;color:rgba(255,255,255,.95);
+        }
+
+        /* Right panel — white, form */
+        .login-right{
+            background:white;display:flex;flex-direction:column;justify-content:center;
+            padding:60px 48px;
+        }
+        .login-right h2{font-size:28px;font-weight:800;color:var(--n900);margin-bottom:6px;}
+        .login-right .sub{font-size:14px;color:var(--n500);margin-bottom:32px;}
+        .login-field{margin-bottom:20px;}
+        .login-field label{display:block;font-size:13px;font-weight:600;color:var(--n700);margin-bottom:8px;}
+        .login-field input{
+            width:100%;padding:14px 18px;border:2px solid var(--n200);border-radius:16px;
+            font-size:15px;font-family:inherit;outline:none;transition:border .15s,box-shadow .15s;
+            background:var(--n50);
+        }
+        .login-field input:focus{border-color:var(--navy-400);background:white;box-shadow:0 0 0 4px var(--navy-50);}
+        .login-btn{
+            width:100%;padding:16px;background:var(--navy-500);color:white;border:none;
+            border-radius:16px;font-size:16px;font-weight:700;cursor:pointer;
+            font-family:inherit;transition:background .15s,transform .1s;margin-top:4px;
+        }
+        .login-btn:hover{background:var(--navy-600);transform:translateY(-1px);}
+        .login-btn:active{transform:translateY(0);}
+        .login-forgot{
+            text-align:center;margin-top:16px;font-size:13px;color:var(--n500);
+        }
+        .login-forgot a{color:var(--navy-500);text-decoration:none;font-weight:600;}
+        .login-divider{
+            display:flex;align-items:center;gap:12px;margin:28px 0;color:var(--n400);font-size:12px;
+        }
+        .login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--n200);}
+        .login-signup{
+            text-align:center;font-size:14px;color:var(--n500);
+        }
+        .login-signup a{
+            color:var(--navy-500);font-weight:700;text-decoration:none;
+            display:inline-flex;align-items:center;gap:4px;
+        }
+        .login-signup a:hover{color:var(--gold-500);}
+    </style>
+</head>
+<body>
+
+<h1 class="page-title">KrakkApp Dashboard Tillögur</h1>
+<p class="page-subtitle">Fresh and Bright — bogalínur, blobs, evergreen + gull, circular progress</p>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- LOGIN TILLAGA -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section-label" style="background:var(--navy-50);color:var(--navy-500);">Login Síða — Heilsíða Split</div>
+
+<div class="login-fullscreen">
+    <!-- Left: Brand + blobs -->
+    <div class="login-left">
+        <div class="lb lb1"></div>
+        <div class="lb lb2"></div>
+        <div class="lb lb3"></div>
+        <div class="lb lb4"></div>
+        <div class="lb lb5"></div>
+        <div class="login-left-content">
+            <h1>Krakk<span>App</span></h1>
+            <p class="tagline">Náms- og verðlaunavettvangar<br/>fyrir börn og foreldra</p>
+            <div class="login-features">
+                <div class="login-feature">
+                    <div class="feat-icon" aria-hidden="true">Sf</div>
+                    <span>Stærðfræðiæfingar með stigakerfi</span>
+                </div>
+                <div class="login-feature">
+                    <div class="feat-icon" aria-hidden="true">Le</div>
+                    <span>Upplestur og lestrarþjálfun</span>
+                </div>
+                <div class="login-feature">
+                    <div class="feat-icon" aria-hidden="true">He</div>
+                    <span>Heimilisstörf með samþykktarflæði</span>
+                </div>
+                <div class="login-feature">
+                    <div class="feat-icon" aria-hidden="true">Vð</div>
+                    <span>Verðlaunakerfi sem hvetur börnin</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Form -->
+    <div class="login-right">
+        <h2>Velkomin/n!</h2>
+        <p class="sub">Skráðu þig inn til að halda áfram</p>
+
+        <div class="login-field">
+            <label>Netfang</label>
+            <input type="email" placeholder="netfang@daemi.is" />
+        </div>
+        <div class="login-field">
+            <label>Lykilorð</label>
+            <input type="password" placeholder="••••••••" />
+        </div>
+        <button class="login-btn">→ Skrá inn</button>
+        <div class="login-forgot">
+            <a href="#">Gleymt lykilorð?</a>
+        </div>
+
+        <div class="login-divider">eða</div>
+
+        <div class="login-signup">
+            Ekki með reikning? <a href="#">Nýskrá →</a>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PARENT DASHBOARD -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section-label" style="background:var(--navy-50);color:var(--navy-500);">Foreldra Dashboard</div>
+
+<div class="parent-frame">
+    <div class="parent-header">
+        <div class="logo">Krakk<span>App</span></div>
+        <div class="user">karikari@kari.is &nbsp;·&nbsp; Útskrá</div>
+    </div>
+    <div class="parent-body">
+        <div class="parent-sidebar">
+            <a class="active" href="#">Yfirlit</a>
+            <a href="#">Börn</a>
+            <a href="#">Verkefni</a>
+            <a href="#">Verðlaun</a>
+            <a href="#">Stillingar</a>
+        </div>
+        <div class="parent-main">
+            <div class="greeting">
+                <h1>Góðan daginn, Kari</h1>
+                <p>Hér er yfirlit yfir börnin þín í dag</p>
+            </div>
+
+            <!-- Stat row with colored backgrounds -->
+            <div class="stat-row">
+                <div class="stat-card" style="background:var(--gold-50);">
+                    <div class="blob" style="background:var(--gold-300);"></div>
+                    <div class="icon-circle" style="background:var(--gold-100);color:var(--gold-500);">St</div>
+                    <div class="value" style="color:var(--gold-500);">1.842</div>
+                    <div class="label" style="color:var(--gold-700);">Heildar stig</div>
+                </div>
+                <div class="stat-card" style="background:var(--info-light);">
+                    <div class="blob" style="background:var(--info);"></div>
+                    <div class="icon-circle" style="background:var(--info-light);color:var(--info);">Sr</div>
+                    <div class="value" style="color:var(--info);">12</div>
+                    <div class="label" style="color:var(--n700);">Lengsta streak</div>
+                </div>
+                <div class="stat-card" style="background:var(--success-light);">
+                    <div class="blob" style="background:var(--success);"></div>
+                    <div class="icon-circle" style="background:var(--success-light);color:var(--success);">Vf</div>
+                    <div class="value" style="color:var(--success);">47</div>
+                    <div class="label" style="color:var(--navy-500);">Verkefni lokið</div>
+                </div>
+                <div class="stat-card" style="background:var(--brown-50);">
+                    <div class="blob" style="background:var(--brown-300);"></div>
+                    <div class="icon-circle" style="background:var(--brown-100);color:var(--brown-500);">Lo</div>
+                    <div class="value" style="color:var(--brown-500);">23</div>
+                    <div class="label" style="color:var(--brown-500);">Lotur lokið</div>
+                </div>
+            </div>
+
+            <!-- Children cards -->
+            <div class="child-section-title">Börnin þín</div>
+            <div class="child-cards">
+                <!-- Anna -->
+                <div class="child-card">
+                    <div class="child-card-header">
+                        <div class="child-card-name">Anna Björk</div>
+                        <div class="child-card-badge">Virk</div>
+                    </div>
+                    <div class="mini-stats">
+                        <div class="mini-stat">
+                            <div class="val" style="color:var(--gold-500);">842</div>
+                            <div class="lbl">Stig</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="val" style="color:var(--info);">7</div>
+                            <div class="lbl">Streak</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="val" style="color:var(--n700);">23</div>
+                            <div class="lbl">Verkefni</div>
+                        </div>
+                    </div>
+                    <!-- Circular progress -->
+                    <div class="circular-wrap">
+                        <div class="circular-progress">
+                            <svg width="64" height="64" viewBox="0 0 64 64">
+                                <circle class="track" cx="32" cy="32" r="28"/>
+                                <circle class="fill" cx="32" cy="32" r="28" stroke="var(--gold-400)"
+                                    stroke-dasharray="176" stroke-dashoffset="44"/>
+                            </svg>
+                            <div class="center-text" style="color:var(--gold-500);">75%</div>
+                        </div>
+                        <div class="circular-info">
+                            <div class="title">Dagmarkmið</div>
+                            <div class="sub">15 af 20 stigum</div>
+                        </div>
+                    </div>
+                    <div class="circular-wrap">
+                        <div class="circular-progress">
+                            <svg width="64" height="64" viewBox="0 0 64 64">
+                                <circle class="track" cx="32" cy="32" r="28"/>
+                                <circle class="fill" cx="32" cy="32" r="28" stroke="var(--success)"
+                                    stroke-dasharray="176" stroke-dashoffset="18"/>
+                            </svg>
+                            <div class="center-text" style="color:var(--success);">94%</div>
+                        </div>
+                        <div class="circular-info">
+                            <div class="title">Stærðfræði nákvæmni</div>
+                            <div class="sub">Síðustu 7 dagar</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Siggi -->
+                <div class="child-card">
+                    <div class="child-card-header">
+                        <div class="child-card-name">Siggi Ben</div>
+                        <div class="child-card-badge" style="background:var(--gold-50);color:var(--gold-700);">1 bíður</div>
+                    </div>
+                    <div class="mini-stats">
+                        <div class="mini-stat">
+                            <div class="val" style="color:var(--gold-500);">456</div>
+                            <div class="lbl">Stig</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="val" style="color:var(--info);">3</div>
+                            <div class="lbl">Streak</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="val" style="color:var(--n700);">11</div>
+                            <div class="lbl">Verkefni</div>
+                        </div>
+                    </div>
+                    <div class="circular-wrap">
+                        <div class="circular-progress">
+                            <svg width="64" height="64" viewBox="0 0 64 64">
+                                <circle class="track" cx="32" cy="32" r="28"/>
+                                <circle class="fill" cx="32" cy="32" r="28" stroke="var(--gold-400)"
+                                    stroke-dasharray="176" stroke-dashoffset="106"/>
+                            </svg>
+                            <div class="center-text" style="color:var(--gold-500);">40%</div>
+                        </div>
+                        <div class="circular-info">
+                            <div class="title">Dagmarkmið</div>
+                            <div class="sub">8 af 20 stigum</div>
+                        </div>
+                    </div>
+                    <div class="circular-wrap">
+                        <div class="circular-progress">
+                            <svg width="64" height="64" viewBox="0 0 64 64">
+                                <circle class="track" cx="32" cy="32" r="28"/>
+                                <circle class="fill" cx="32" cy="32" r="28" stroke="var(--success)"
+                                    stroke-dasharray="176" stroke-dashoffset="53"/>
+                            </svg>
+                            <div class="center-text" style="color:var(--success);">72%</div>
+                        </div>
+                        <div class="circular-info">
+                            <div class="title">Stærðfræði nákvæmni</div>
+                            <div class="sub">Síðustu 7 dagar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- CHILD DASHBOARD -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section-label" style="background:var(--gold-100);color:var(--gold-700);">Barna Dashboard</div>
+
+<div class="child-frame">
+    <!-- Hero with blobs -->
+    <div class="child-hero">
+        <div class="blob1"></div>
+        <div class="blob2"></div>
+        <div class="content">
+            <div class="avatar" aria-hidden="true">AB</div>
+            <div class="greeting-text">Hæ, Anna!</div>
+            <div class="points-big">842</div>
+            <div class="points-label">stig til að nota</div>
+            <div class="badges">
+                <div class="badge" style="color:var(--info);">7 daga streak</div>
+                <div class="badge" style="color:var(--gold-700);">2× bónus</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wave divider -->
+    <div class="child-wave">
+        <svg viewBox="0 0 390 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 20C65 40 130 0 195 20C260 40 325 0 390 20V40H0V20Z" fill="white"/>
+        </svg>
+    </div>
+
+    <!-- Content -->
+    <div class="child-content">
+        <!-- Activity cards -->
+        <div class="section-title-child">Hvað viltu gera?</div>
+        <div class="activity-grid">
+            <div class="activity-card" style="background:var(--navy-50);">
+                <div class="card-blob" style="background:var(--navy-200);"></div>
+                <div class="card-icon" style="background:var(--navy-100);color:var(--navy-500);">Sf</div>
+                <div class="card-title">Stærðfræði</div>
+                <div class="card-sub">10 dæmi bíða</div>
+            </div>
+            <div class="activity-card" style="background:var(--brown-50);">
+                <div class="card-blob" style="background:var(--brown-300);"></div>
+                <div class="card-icon" style="background:var(--brown-100);color:var(--brown-500);">Le</div>
+                <div class="card-title">Lestur</div>
+                <div class="card-sub">Nýr texti tilbúinn</div>
+            </div>
+            <div class="activity-card" style="background:var(--success-light);">
+                <div class="card-blob" style="background:var(--success);"></div>
+                <div class="card-icon" style="background:var(--success-light);color:var(--success);">Vf</div>
+                <div class="card-title">Verkefni</div>
+                <div class="card-sub">2 af 4 lokið</div>
+            </div>
+            <div class="activity-card" style="background:var(--gold-50);">
+                <div class="card-blob" style="background:var(--gold-300);"></div>
+                <div class="card-icon" style="background:var(--gold-100);color:var(--gold-500);">Vð</div>
+                <div class="card-title">Verðlaun</div>
+                <div class="card-sub">3 í boði</div>
+            </div>
+        </div>
+
+        <!-- Progress section -->
+        <div class="section-title-child">Framvinda dagsins</div>
+        <div class="progress-card">
+            <div class="progress-row">
+                <div class="circular-progress">
+                    <svg width="64" height="64" viewBox="0 0 64 64">
+                        <circle class="track" cx="32" cy="32" r="28"/>
+                        <circle class="fill" cx="32" cy="32" r="28" stroke="var(--gold-400)"
+                            stroke-dasharray="176" stroke-dashoffset="44"/>
+                    </svg>
+                    <div class="center-text" style="color:var(--gold-500);font-size:16px;font-weight:800;">75%</div>
+                </div>
+                <div>
+                    <div style="font-size:14px;font-weight:700;color:var(--n900);">Dagmarkmið</div>
+                    <div style="font-size:12px;color:var(--n500);">15 af 20 stigum</div>
+                    <div style="margin-top:8px;">
+                        <div class="progress-bar-track" style="width:160px;">
+                            <div class="progress-bar-fill" style="width:75%;background:var(--gold-400);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-card" style="background:var(--navy-50);">
+            <div style="font-size:13px;font-weight:600;color:var(--navy-500);margin-bottom:8px;">Stærðfræði í dag</div>
+            <div style="display:flex;gap:20px;">
+                <div style="text-align:center;">
+                    <div style="font-size:24px;font-weight:800;color:var(--success);">8</div>
+                    <div style="font-size:11px;color:var(--n500);">Rétt</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:24px;font-weight:800;color:var(--error);">2</div>
+                    <div style="font-size:11px;color:var(--n500);">Rangt</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:24px;font-weight:800;color:var(--n400);">0</div>
+                    <div style="font-size:11px;color:var(--n500);">Sleppt</div>
+                </div>
+                <div style="text-align:center;margin-left:auto;">
+                    <div style="font-size:24px;font-weight:800;color:var(--navy-500);">+10</div>
+                    <div style="font-size:11px;color:var(--n500);">Stig</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom nav -->
+    <div class="child-bottom-nav">
+        <div class="tab active">
+            <div class="tab-icon">H</div>Heim
+        </div>
+        <div class="tab">
+            <div class="tab-icon">S</div>Stærðfræði
+        </div>
+        <div class="tab">
+            <div class="tab-icon">L</div>Lestur
+        </div>
+        <div class="tab">
+            <div class="tab-icon">V</div>Verðlaun
+        </div>
+    </div>
+</div>
+
+<div style="text-align:center;padding:40px;color:var(--n400);font-size:12px;">
+    KrakkApp Dashboard Tillögur — Fresh and Bright · Evergreen · Golden Sun · Mint / Blush accents
+</div>
+
+</body>
+</html>

@@ -4,91 +4,145 @@
 
 ## Grunnregla
 
-Barnvænt en ekki barnalegt. Hreint, skýrt og hvetjandi.
-Tveir aðskildir heimar — foreldri og barn — deila navy sem aðallit, barn fær gull accent.
+Barnvænt en ekki barnalegt. **Lífrænt, hlýtt og hvetjandi.**
+Bogalínur, mjúk form og litaðir bakgrunnar — ekkert er harð-kantuð.
+Tveir aðskildir heimar — foreldri og barn — deila Evergreen Mist sem aðallit; barn fær Golden Sun og Citrus Burst sem accent.
 
 ---
 
-## 5 Grunnlitir
+## 6 Grunnlitir (Fresh and Bright)
 
 | Litur | Hex | Hlutverk |
 |-------|-----|----------|
-| Navy | `#1F2E6C` | Aðallitur — takkar, header, fyrirsagnir |
-| Brown | `#734A27` | Hlýr accent — flokkur, aukatakkar |
-| Dark Gold | `#D0A51D` | Hover á gulli, gull texti |
-| Yellow | `#FAD707` | Stig, stjörnur, barna accent |
-| Off-white | `#FAFAF9` | Bakgrunnur |
+| Evergreen Mist | `#324F44` | Aðallitur — takkar, header, fyrirsagnir |
+| Golden Sun | `#FFD746` | Stig, stjörnur, barna accent |
+| Citrus Burst | `#FF9B2E` | Hlýr accent — streak, aukahlutar |
+| Minted Cream | `#D9E8C1` | Rólegur bakgrunnur, success, blobs |
+| Soft Blush | `#F6E1DE` | Mjúkur hlýr bakgrunnur, mildar yfirborðsáherslur |
+| Vanilla Cream | `#F3EFE6` | Aðalsíðubakgrunnur, hlýtt off-white |
+
+---
+
+## Hönnunarstíll — Organic / Soft UI
+
+### Lífræn form (Blobs)
+- SVG blob shapes á bak við hero sections og stórar tölur
+- Blobbar nota `minted-cream`, `soft-blush`, `golden-sun` (dælt) sem fill
+- Aldrei harðar línur — allt flæðir
+
+### Bogalínur (Wave Dividers)
+- SVG bylgjulínur skipta á milli hluta
+- Soft curve, ekki zig-zag
+- Nota aðallit section-ins eða `neutral-100`
+
+### Litaðar sections
+- Hver kafli á dashboard fær eigin bakgrunnslit:
+  - Stig hero: `golden-sun` / ljóst gult (`gold-50`)
+  - Stærðfræði: `evergreen-50`
+  - Lestur: `soft-blush` eða `minted-cream` (mjúkt)
+  - Verkefni: `success-light` / `minted-cream`
+- Hvít kort fljóta á ofan á lituðum sections
+
+### Border radius
+- Foreldraviðmót: `rounded-2xl` (16px)
+- Barnaviðmót: `rounded-3xl` (24px)
+- Takkar: `rounded-2xl`
+- Avatar/progress: `rounded-full`
+
+### Skuggar
+- Foreldri: `shadow-sm` — mjúkt
+- Barn: `shadow-lg` — meiri djúp og varmi
 
 ---
 
 ## Litapaletta — Full scale
 
-### Navy (Primary)
+### Evergreen Mist (Primary)
 
 | Token | Hex | Notkun |
 |-------|-----|--------|
-| `navy-50` | `#EAECF3` | Bakgrunnsblær, valdir liðir |
-| `navy-100` | `#C8CCE0` | Tags, border |
-| `navy-200` | `#A3AACA` | Rammar, border |
-| `navy-300` | `#7D87B4` | Disabled |
-| `navy-400` | `#4E5B8E` | Aukatexti |
-| `navy-500` | `#1F2E6C` | Takkar, tenglar, header |
-| `navy-600` | `#1B2860` | Hover |
-| `navy-700` | `#162152` | Active |
-| `navy-900` | `#0C1230` | Fyrirsagnir |
+| `evergreen-50` | `#E8EFEC` | Section bakgrunnur, valdir liðir |
+| `evergreen-100` | `#D0DDD7` | Tags, border |
+| `evergreen-200` | `#B0C7BC` | Rammar, disabled border |
+| `evergreen-300` | `#7A9E8C` | Disabled texti |
+| `evergreen-400` | `#4D6B5E` | Aukatexti |
+| `evergreen-500` | `#324F44` | Takkar, tenglar, header |
+| `evergreen-600` | `#2A4239` | Hover |
+| `evergreen-700` | `#22352E` | Active |
+| `evergreen-900` | `#1A2822` | Dökkar fyrirsagnir |
 
-### Gold (Child accent / Points)
-
-| Token | Hex | Notkun |
-|-------|-----|--------|
-| `gold-50` | `#FFFDE7` | Barna bakgrunnur |
-| `gold-100` | `#FFF8C4` | Highlight, bónus bakgrunnur |
-| `gold-200` | `#FFF09D` | Hringir, tags |
-| `gold-300` | `#FFE876` | Light accent |
-| `gold-400` | `#FAD707` | Stig, stjörnur, barna takkar |
-| `gold-500` | `#D0A51D` | Hover á gulli |
-| `gold-700` | `#8A6B10` | Gull texti á ljósum bakgrunni |
-
-### Brown (Warm accent)
+### Golden Sun (Child accent / Points)
 
 | Token | Hex | Notkun |
 |-------|-----|--------|
-| `brown-50` | `#F5EDE7` | Hlýr bakgrunnur |
-| `brown-100` | `#E6D5C7` | Border |
-| `brown-300` | `#BB9677` | Aukaaktar |
-| `brown-500` | `#734A27` | Verkefna flokkur, aukatakki |
-| `brown-700` | `#51341A` | Dökkur texti |
+| `gold-50` | `#FFFBEB` | Stig section bakgrunnur |
+| `gold-100` | `#FFF4D4` | Highlight, bónus bakgrunnur |
+| `gold-200` | `#FFE99F` | Blob fill, tags |
+| `gold-300` | `#FFE066` | Light accent |
+| `gold-400` | `#FFD746` | Stig, stjörnur, barna takkar |
+| `gold-500` | `#D4B435` | Hover á gulli, tölutexti á ljósu |
+| `gold-700` | `#6B5420` | Gull texti á ljósum bakgrunni |
+
+### Citrus Burst (Warm accent)
+
+| Token | Hex | Notkun |
+|-------|-----|--------|
+| `citrus-50` | `#FFF4E8` | Hlýr section bakgrunnur |
+| `citrus-100` | `#FFE4CC` | Border, tags |
+| `citrus-300` | `#FFB366` | Blob, icon bakgrunnur |
+| `citrus-500` | `#FF9B2E` | Streak, áhersla, aukatakki |
+| `citrus-700` | `#B86A18` | Dökkur texti á ljósu |
+
+### Minted Cream
+
+| Token | Hex | Notkun |
+|-------|-----|--------|
+| `mint-50` | `#F2F7EA` | Mjúkur bg |
+| `mint-100` | `#E5EFD5` | Kort, subtle fill |
+| `mint-200` | `#D9E8C1` | Grunnlitur — blobs, success yfirborð |
+| `mint-300` | `#B8D199` | Hover á mint svæðum |
+| `mint-500` | `#6B8F5A` | Texti á mjúku mint (ef þarf) |
+
+### Soft Blush
+
+| Token | Hex | Notkun |
+|-------|-----|--------|
+| `blush-50` | `#FDF8F7` | Mjúkast |
+| `blush-100` | `#F6E1DE` | Grunnlitur — hlýjar yfirborðsáherslur |
+| `blush-200` | `#EECBC4` | Border |
+
+### Vanilla Cream (Neutrals base)
+
+| Token | Hex | Notkun |
+|-------|-----|--------|
+| `cream` | `#F3EFE6` | Aðal bakgrunnur síðu |
 
 ### Stöðulitir
 
 | Token | Hex | Notkun |
 |-------|-----|--------|
-| `success` | `#10B981` | Rétt svar, samþykkt |
-| `success-light` | `#ECFDF5` | Bakgrunnur á jákvæðu |
-| `error` | `#EF4444` | Rangt svar, hafnað |
-| `error-light` | `#FEF2F2` | Bakgrunnur á neikvæðu |
-| `warning` | `#D0A51D` | Bíður samþykkis (dark gold) |
-| `warning-light` | `#FFFDE7` | Bakgrunnur á viðvörun |
-| `info` | `#0EA5E9` | Streak, upplýsingar |
-| `info-light` | `#F0F9FF` | Bakgrunnur á upplýsingum |
+| `success` | `#2D6A4F` | Rétt svar, samþykkt (grænn í takt við evergreen) |
+| `success-light` | `#D9E8C1` | Verkefni section — sama og minted cream |
+| `error` | `#C64632` | Rangt svar, hafnað (lesanlegur rauður) |
+| `error-light` | `#FDEEEB` | Bakgrunnur á neikvæðu |
+| `info` | `#3D7A8C` | Streak, upplýsingar (blágrænn, ekki í grunnpöllu) |
+| `info-light` | `#E8F4F7` | Bakgrunnur á upplýsingum |
 
 ### Hlutlausir litir (warm neutrals)
 
 | Token | Hex | Notkun |
 |-------|-----|--------|
-| `neutral-50` | `#FAFAF9` | Síðu bakgrunnur |
-| `neutral-100` | `#F3F2F0` | Korta bakgrunnur |
-| `neutral-200` | `#E5E4E1` | Border, skipting |
-| `neutral-300` | `#D1D0CC` | Rammar |
-| `neutral-500` | `#73726D` | Aukatexti, placeholder |
+| `neutral-50` | `#F3EFE6` | Samsvarar vanilla cream |
+| `neutral-100` | `#EBE6DC` | Wave divider, subtle bg |
+| `neutral-200` | `#D9D4C9` | Border, skipting |
+| `neutral-300` | `#C4BFB3` | Rammar |
+| `neutral-500` | `#6E6A62` | Aukatexti, placeholder |
 | `neutral-700` | `#3D3C39` | Meginmálstexti |
 | `neutral-900` | `#1A1918` | Fyrirsagnir |
 
 ---
 
 ## Leturval (Typography)
-
-### Leturgerð
 
 | Notkun | Leturgerð | Fallback |
 |--------|-----------|----------|
@@ -105,8 +159,9 @@ Tveir aðskildir heimar — foreldri og barn — deila navy sem aðallit, barn f
 | `text-lg` | 18px | Korta titlar |
 | `text-xl` | 20px | Kafla fyrirsagnir |
 | `text-2xl` | 24px | Síðu fyrirsagnir |
-| `text-3xl` | 30px | Stórar tölur |
-| `text-4xl` | 36px | Hero tölur í barnaviðmóti |
+| `text-3xl` | 30px | Stórar tölur (foreldri) |
+| `text-4xl` | 36px | Hero tölur |
+| `text-5xl` | 48px | Hero stig í barnaviðmóti |
 
 ---
 
@@ -116,19 +171,19 @@ Tveir aðskildir heimar — foreldri og barn — deila navy sem aðallit, barn f
 
 | Tegund | Stíll |
 |--------|-------|
-| **Primary** | `bg-navy-500 text-white hover:bg-navy-600 rounded-md` |
-| **Secondary** | `bg-white text-navy-500 border-navy-200 hover:bg-navy-50 rounded-md` |
-| **Brown** | `bg-brown-500 text-white hover:bg-brown-600 rounded-md` |
-| **Danger** | `bg-error text-white rounded-md` |
-| **Ghost** | `text-neutral-500 hover:bg-neutral-100 rounded-md` |
+| **Primary** | `bg-evergreen-500 text-white hover:bg-evergreen-600 rounded-2xl px-5 py-2.5` |
+| **Secondary** | `bg-white text-evergreen-500 border-evergreen-200 hover:bg-evergreen-50 rounded-2xl` |
+| **Citrus** | `bg-citrus-500 text-white hover:bg-citrus-600 rounded-2xl` |
+| **Danger** | `bg-error text-white rounded-2xl` |
+| **Ghost** | `text-neutral-500 hover:bg-neutral-100 rounded-2xl` |
 
 ### Barnaviðmót
 
 | Tegund | Stíll |
 |--------|-------|
-| **Primary** | `bg-navy-500 text-white rounded-xl px-6 py-3 font-bold text-lg shadow-md` |
-| **Gold** | `bg-gold-400 text-neutral-900 hover:bg-gold-500 rounded-xl shadow-md` |
-| **Success** | `bg-success text-white rounded-xl shadow-md` |
+| **Primary** | `bg-evergreen-500 text-white rounded-3xl px-8 py-4 font-bold text-lg shadow-lg` |
+| **Gold** | `bg-gold-400 text-neutral-900 hover:brightness-95 rounded-3xl shadow-lg` |
+| **Success** | `bg-success text-white rounded-3xl shadow-lg` |
 
 ---
 
@@ -136,38 +191,38 @@ Tveir aðskildir heimar — foreldri og barn — deila navy sem aðallit, barn f
 
 ### Foreldraviðmót
 ```
-bg-white rounded-lg shadow border border-neutral-200 p-6
+bg-white rounded-2xl shadow-sm p-6
 ```
 
 ### Barnaviðmót
 ```
-bg-white rounded-2xl shadow-md p-6
+bg-white rounded-3xl shadow-lg p-6
 ```
 
----
-
-## Badge / Tag
-
-| Tegund | Litir |
-|--------|-------|
-| Samþykkt | `bg-success-light text-emerald-700` |
-| Hafnað | `bg-error-light text-red-700` |
-| Bíður | `bg-warning-light text-brown-600` |
-| Upplýsingar | `bg-info-light text-sky-700` |
-| Flokkur | `bg-navy-50 text-navy-600` |
+Engin sýnileg border á kortum — skuggi einn sér um djúp.
 
 ---
 
-## Stig og tölur
+## Upplýsingaframsetning
 
-| Element | Litur |
-|---------|-------|
-| Stig teljari (barn) | `text-4xl font-bold text-gold-400` |
-| Stig teljari (foreldri) | `text-2xl font-bold text-navy-500` |
-| Streak | `text-info` |
-| Bónus | `text-brown-500` á `bg-gold-100` |
-| Credit (+) | `text-success font-semibold` |
-| Debit (−) | `text-error font-semibold` |
+### Circular Progress (hringframvinda)
+- Dagmarkmið, nákvæmni, framvinda
+- SVG hringur með stroke-dasharray
+- Bakgrunnshringur: `neutral-200`
+- Framvinda: `gold-400` (stig), `success` (nákvæmni), `evergreen-500` (almennt)
+- Stór tala í miðjunni
+
+### Stat Cards (tölfræði kubbar)
+- 2-3 í röð, hvort með eigin bakgrunnslit
+- Icon í litaðri hring efst
+- Stór tala
+- Lítill label neðst
+- `rounded-2xl` á foreldri, `rounded-3xl` á barni
+
+### Línurit (7-daga trend)
+- Smooth bezier curve — aldrei beinar línur
+- Fill undir línu með gradient (fade to transparent)
+- Á `gold-50` eða `vanilla cream` bakgrunni
 
 ---
 
@@ -177,16 +232,17 @@ bg-white rounded-2xl shadow-md p-6
 |---------|----------|-----------|
 | Rétt svar | `glow (success)` | 300ms |
 | Rangt svar | `shake` | 300ms |
-| Stig bætast við | `glow (gold)` | 300ms |
+| Stig bætast við | `glow (gold) + count-up` | 500ms |
 | Streak | `pulse` | 300ms |
-| Modal/kort | `bounce-in` | 300ms |
+| Kort birtast | `fade-up` | 200ms |
+| Circular progress | `draw-in` (stroke animation) | 800ms |
 | Síðuskipti | `fade-in` | 150ms |
 
 ---
 
 ## Iconography
 
-**Lucide React** — aðal icon safn
+**Lucide React** — aðal icon safn. Forðast emoji og skrautkosti í viðmóti; nota Lucide-ikon (eða stutta textamerki / skammstöfun þegar ikon vantar).
 
 | Aðgerð | Icon |
 |--------|------|
@@ -199,20 +255,24 @@ bg-white rounded-2xl shadow-md p-6
 | Bónus | `Zap` |
 | Stillingar | `Settings` |
 
+Icons birtast í **litaðri hring** (48-64px) — ekki naktar.
+
 ---
 
 ## Layout skipulag
 
 ### Foreldraviðmót
-- Navy header + sidebar nav
+- Evergreen header + sidebar nav
 - Main content: `max-w-5xl mx-auto`
 - Sidebar foldable á `< lg`
+- Sections með litaðir bakgrunnar og wave dividers
 
 ### Barnaviðmót
 - Centered single-column: `max-w-md`
-- Gold-tinted bakgrunnur (`gold-50`)
-- Bottom nav (4 tabs) með gold indicator á active tab
-- Stórir takkar, skýrt layout
+- Blob shapes á bak við hero
+- Gull- og rjómalitaður bakgrunnur (`gold-50` / `vanilla cream`)
+- Bottom nav (4 tabs) með golden sun indicator
+- Stórir rounded takkar
 
 ---
 
@@ -220,15 +280,16 @@ bg-white rounded-2xl shadow-md p-6
 
 | Eiginleiki | Foreldri | Barn |
 |------------|----------|------|
-| Aðallitur | Navy | Navy + Gold |
-| Accent | Brown | Gold (stig, verðlaun) |
-| Bakgrunnur | Off-white | Gold-50 |
-| Border radius | 6–8px | 12–16px |
-| Skuggar | shadow | shadow-md |
+| Aðallitur | Evergreen Mist | Evergreen + Golden Sun |
+| Accent | Mint / Citrus | Golden Sun + Citrus Burst |
+| Bakgrunnur | Vanilla cream + litaðar sections | Golden-50 + blobs |
+| Border radius | `rounded-2xl` (16px) | `rounded-3xl` (24px) |
+| Skuggar | `shadow-sm` | `shadow-lg` |
 | Leturstærð | 14–16px | 18–20px |
-| Takkar | Flatter, minni | Stærri, boldari |
-| Hreyfingar | Lágmarks | Meiri — gull glow, shake |
-| Nav | Sidebar | Bottom tabs + gold indicator |
+| Takkar | `rounded-2xl`, minni | `rounded-3xl`, stærri |
+| Hreyfingar | Lágmarks | Meiri — glow, count-up |
+| Nav | Sidebar | Bottom tabs |
+| Form | Litaðar sections, wave dividers | Blobs, circular progress |
 
 ---
 
