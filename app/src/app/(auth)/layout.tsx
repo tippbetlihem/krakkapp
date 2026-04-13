@@ -7,9 +7,9 @@ export default function AuthLayout({
 }) {
   return (
     <div className="min-h-full flex items-center justify-center bg-cream px-4 py-8">
-      <div className="w-full max-w-[920px] flex rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden bg-white">
+      <div className="w-full max-w-[920px] flex rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-visible bg-white relative">
         {/* Left — Form */}
-        <div className="flex-1 flex flex-col justify-center px-8 py-10 sm:px-12 min-w-0">
+        <div className="flex-1 flex flex-col justify-center px-8 py-10 sm:px-12 min-w-0 relative z-20">
           <div className="mb-6">
             <h1 className="text-2xl font-extrabold text-evergreen-500 tracking-tight">
               Krakk<span className="text-gold-400">App</span>
@@ -19,9 +19,9 @@ export default function AuthLayout({
         </div>
 
         {/* Right — Mascot hero panel */}
-        <div className="hidden md:block w-[400px] flex-shrink-0 relative">
-          {/* Gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-evergreen-500 via-evergreen-600 to-evergreen-900" />
+        <div className="hidden md:block w-[400px] flex-shrink-0 relative overflow-visible rounded-r-3xl">
+          {/* Gradient background — clipped to panel */}
+          <div className="absolute inset-0 bg-gradient-to-br from-evergreen-500 via-evergreen-600 to-evergreen-900 rounded-r-3xl" />
 
           {/* Soft glow circles */}
           <div className="absolute w-64 h-64 rounded-full bg-gold-400 opacity-15 -top-20 -right-20 blur-2xl" />
@@ -41,28 +41,11 @@ export default function AuthLayout({
               </h2>
             </div>
 
-            {/* Mascots */}
-            <div className="flex items-end justify-center gap-[-8px] mt-auto pt-8">
-              <div className="w-40 h-40 relative animate-[float2_8s_ease-in-out_infinite] -mr-3">
-                <Image
-                  src="/mascots/green.png"
-                  alt="KrakkApp mascot"
-                  fill
-                  className="object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
-                />
-              </div>
-              <div className="w-44 h-44 relative animate-[float1_7s_ease-in-out_infinite] -ml-3 mb-2">
-                <Image
-                  src="/mascots/orange.png"
-                  alt="KrakkApp mascot"
-                  fill
-                  className="object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
-                />
-              </div>
-            </div>
+            {/* Spacer */}
+            <div className="flex-1" />
 
             {/* Bottom tagline */}
-            <div className="mt-6 flex items-center gap-3">
+            <div className="flex items-center gap-3">
               <div className="flex -space-x-2">
                 <div className="w-7 h-7 rounded-full bg-gold-400 border-2 border-evergreen-600" />
                 <div className="w-7 h-7 rounded-full bg-citrus-400 border-2 border-evergreen-600" />
@@ -71,6 +54,28 @@ export default function AuthLayout({
               <p className="text-evergreen-200 text-xs">
                 Stærðfræði · Lestur · Verkefni · Verðlaun
               </p>
+            </div>
+          </div>
+
+          {/* Mascots — overflow into white area */}
+          <div className="absolute -bottom-4 -left-20 z-30 flex items-end">
+            {/* Green mascot — in front */}
+            <div className="w-52 h-52 relative z-20 animate-[float2_8s_ease-in-out_infinite]">
+              <Image
+                src="/mascots/green.png"
+                alt="KrakkApp mascot"
+                fill
+                className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
+              />
+            </div>
+            {/* Orange mascot — behind, offset right */}
+            <div className="w-48 h-48 relative z-10 -ml-10 mb-3 animate-[float1_7s_ease-in-out_infinite]">
+              <Image
+                src="/mascots/orange.png"
+                alt="KrakkApp mascot"
+                fill
+                className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
+              />
             </div>
           </div>
         </div>
