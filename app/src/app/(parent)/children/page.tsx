@@ -3,6 +3,7 @@ import { Users, ExternalLink } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import type { Child } from "@/types/database";
 import { CopyChildIdButton } from "@/components/parent/CopyChildIdButton";
+import { AddChildForm } from "@/components/parent/AddChildForm";
 
 export default async function ChildrenPage() {
   const supabase = await createClient();
@@ -24,19 +25,19 @@ export default async function ChildrenPage() {
           <h1 className="text-xl font-extrabold text-neutral-900">Börn</h1>
         </div>
         <p className="text-sm leading-relaxed text-neutral-500">
-          Hér sérðu barna-ID til innskráningar barnsins á{" "}
+          Bættu við barni hér fyrir neðan. Barna-ID til innskráningar barnsins á{" "}
           <Link href="/child/login" className="font-semibold text-evergreen-600 hover:underline">
             /child/login
-          </Link>
-          . Settu PIN í gagnagrunninum (reitur{" "}
-          <code className="rounded bg-neutral-100 px-1 text-xs">pin_code</code>) eða með SQL / Supabase
-          — UI til að breyta PIN kemur síðar.
+          </Link>{" "}
+          birtist eftir að barnið er búið til (ásamt PIN sem þú velur í forminu).
         </p>
       </section>
 
+      <AddChildForm />
+
       {children.length === 0 ? (
-        <div className="rounded-2xl border border-neutral-200/80 bg-white p-8 text-center text-neutral-500">
-          Engin börn skráð ennþá.
+        <div className="rounded-2xl border border-dashed border-neutral-200 bg-neutral-50/80 p-6 text-center text-sm text-neutral-500">
+          Engin börn á listanum enn — búðu til fyrsta barnið með forminu hér fyrir ofan.
         </div>
       ) : (
         <ul className="space-y-3">
