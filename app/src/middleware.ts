@@ -33,13 +33,17 @@ export async function middleware(request: NextRequest) {
   const childToken = request.cookies.get("krakkapp_child_token")?.value;
   const hasChildSession = Boolean(childToken && childToken.length >= 16);
 
+  // Aðeins `/child` og `/child/...` — EKKI `/children` (foreldra-síða)
+  const isChildAppPath =
+    pathname === "/child" || pathname.startsWith("/child/");
+
   if (pathname === "/child") {
     const url = request.nextUrl.clone();
     url.pathname = hasChildSession ? "/child/home" : "/child/login";
     return NextResponse.redirect(url);
   }
 
-  if (pathname.startsWith("/child") && !pathname.startsWith("/child/login")) {
+  if (isChildAppPath && !pathname.startsWith("/child/login")) {
     if (!hasChildSession) {
       const url = request.nextUrl.clone();
       url.pathname = "/child/login";
@@ -66,6 +70,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/dashboard/:path*",
+    "/children",
     "/children/:path*",
     "/tasks/:path*",
     "/rewards/:path*",
