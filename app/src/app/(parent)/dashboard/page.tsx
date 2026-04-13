@@ -106,10 +106,10 @@ export default async function DashboardPage() {
   const featuredChildren = (children ?? []).slice(0, 4);
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
       <div className="space-y-6">
         <section className="rounded-[28px] bg-white border border-neutral-200 px-6 py-7">
-          <h2 className="text-5xl font-black tracking-tight text-neutral-900 leading-[0.95]">
+          <h2 className="text-3xl sm:text-4xl xl:text-5xl font-black tracking-tight text-neutral-900 leading-[0.95]">
             Fjárfestu í
             <br />
             menntun barnsins
@@ -118,7 +118,7 @@ export default async function DashboardPage() {
             Mjúkt yfirlit yfir virkni, markmið og framfarir, innblásið af nýja
             dashboard stílnum.
           </p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 2xl:grid-cols-4">
             <MetricCard label="Virk börn" value={String(activeChildren)} sub={`${children?.length ?? 0} skráð`} icon={<Users size={16} />} tone="evergreen" />
             <MetricCard label="Stig í pússi" value={String(totalPoints)} sub="samtals núna" icon={<Star size={16} />} tone="gold" />
             <MetricCard label="Samanlögð röð" value={String(totalStreak)} sub="dagar" icon={<Flame size={16} />} tone="info" />
