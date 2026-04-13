@@ -24,6 +24,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS trg_on_auth_user_created ON auth.users;
 CREATE TRIGGER trg_on_auth_user_created
     AFTER INSERT ON auth.users
     FOR EACH ROW EXECUTE FUNCTION fn_handle_new_user();
@@ -47,6 +48,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS trg_child_create_defaults ON children;
 CREATE TRIGGER trg_child_create_defaults
     AFTER INSERT ON children
     FOR EACH ROW EXECUTE FUNCTION fn_create_child_defaults();
@@ -66,6 +68,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trg_children_extract_birth_year ON children;
 CREATE TRIGGER trg_children_extract_birth_year
     BEFORE INSERT OR UPDATE OF birth_date ON children
     FOR EACH ROW EXECUTE FUNCTION fn_extract_birth_year();
@@ -96,6 +99,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trg_points_ledger_update_child ON points_ledger;
 CREATE TRIGGER trg_points_ledger_update_child
     AFTER INSERT ON points_ledger
     FOR EACH ROW EXECUTE FUNCTION fn_update_child_points();
@@ -131,6 +135,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS trg_task_status_change ON tasks;
 CREATE TRIGGER trg_task_status_change
     AFTER UPDATE OF status ON tasks
     FOR EACH ROW EXECUTE FUNCTION fn_task_status_change();
@@ -182,6 +187,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS trg_math_session_completed ON math_sessions;
 CREATE TRIGGER trg_math_session_completed
     AFTER UPDATE OF status ON math_sessions
     FOR EACH ROW EXECUTE FUNCTION fn_math_session_completed();
@@ -232,6 +238,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS trg_reading_session_completed ON reading_sessions;
 CREATE TRIGGER trg_reading_session_completed
     AFTER UPDATE OF status ON reading_sessions
     FOR EACH ROW EXECUTE FUNCTION fn_reading_session_completed();
@@ -262,6 +269,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS trg_ledger_daily_stats ON points_ledger;
 CREATE TRIGGER trg_ledger_daily_stats
     AFTER INSERT ON points_ledger
     FOR EACH ROW EXECUTE FUNCTION fn_ledger_update_daily_stats();
@@ -308,6 +316,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS trg_daily_stats_streak ON child_daily_stats;
 CREATE TRIGGER trg_daily_stats_streak
     BEFORE INSERT OR UPDATE ON child_daily_stats
     FOR EACH ROW EXECUTE FUNCTION fn_update_streak();
@@ -332,6 +341,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS trg_daily_stats_goal_check ON child_daily_stats;
 CREATE TRIGGER trg_daily_stats_goal_check
     BEFORE INSERT OR UPDATE OF points_earned ON child_daily_stats
     FOR EACH ROW EXECUTE FUNCTION fn_check_daily_goal();
@@ -349,6 +359,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+DROP TRIGGER IF EXISTS trg_reading_session_text_usage ON reading_sessions;
 CREATE TRIGGER trg_reading_session_text_usage
     AFTER INSERT ON reading_sessions
     FOR EACH ROW EXECUTE FUNCTION fn_increment_text_usage();

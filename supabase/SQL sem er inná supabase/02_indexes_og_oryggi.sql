@@ -9,23 +9,23 @@
 -- ─────────────────────────────────────────────────────────────
 -- Án þessara væri gagnagrunnurinn hægur þegar gögn stækka.
 
-CREATE INDEX idx_children_parent_id                ON children(parent_id);
-CREATE INDEX idx_tasks_child_id                    ON tasks(child_id);
-CREATE INDEX idx_tasks_parent_id                   ON tasks(parent_id);
-CREATE INDEX idx_tasks_status                      ON tasks(status);
-CREATE INDEX idx_math_sessions_child_id            ON math_sessions(child_id);
-CREATE INDEX idx_math_sessions_status              ON math_sessions(status);
-CREATE INDEX idx_math_session_questions_session_id  ON math_session_questions(math_session_id);
-CREATE INDEX idx_reading_sessions_child_id         ON reading_sessions(child_id);
-CREATE INDEX idx_reading_sessions_status           ON reading_sessions(status);
-CREATE INDEX idx_reading_sessions_text_id          ON reading_sessions(reading_text_id);
-CREATE INDEX idx_points_ledger_child_id            ON points_ledger(child_id);
-CREATE INDEX idx_points_ledger_source_type         ON points_ledger(source_type);
-CREATE INDEX idx_points_ledger_created_at          ON points_ledger(created_at);
-CREATE INDEX idx_point_multipliers_child_id        ON point_multipliers(child_id);
-CREATE INDEX idx_point_multipliers_ends_at         ON point_multipliers(ends_at);
-CREATE INDEX idx_reward_redemptions_child_id       ON reward_redemptions(child_id);
-CREATE INDEX idx_reward_redemptions_status         ON reward_redemptions(status);
+CREATE INDEX IF NOT EXISTS idx_children_parent_id                ON children(parent_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_child_id                    ON tasks(child_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_parent_id                   ON tasks(parent_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_status                      ON tasks(status);
+CREATE INDEX IF NOT EXISTS idx_math_sessions_child_id            ON math_sessions(child_id);
+CREATE INDEX IF NOT EXISTS idx_math_sessions_status              ON math_sessions(status);
+CREATE INDEX IF NOT EXISTS idx_math_session_questions_session_id  ON math_session_questions(math_session_id);
+CREATE INDEX IF NOT EXISTS idx_reading_sessions_child_id         ON reading_sessions(child_id);
+CREATE INDEX IF NOT EXISTS idx_reading_sessions_status           ON reading_sessions(status);
+CREATE INDEX IF NOT EXISTS idx_reading_sessions_text_id          ON reading_sessions(reading_text_id);
+CREATE INDEX IF NOT EXISTS idx_points_ledger_child_id            ON points_ledger(child_id);
+CREATE INDEX IF NOT EXISTS idx_points_ledger_source_type         ON points_ledger(source_type);
+CREATE INDEX IF NOT EXISTS idx_points_ledger_created_at          ON points_ledger(created_at);
+CREATE INDEX IF NOT EXISTS idx_point_multipliers_child_id        ON point_multipliers(child_id);
+CREATE INDEX IF NOT EXISTS idx_point_multipliers_ends_at         ON point_multipliers(ends_at);
+CREATE INDEX IF NOT EXISTS idx_reward_redemptions_child_id       ON reward_redemptions(child_id);
+CREATE INDEX IF NOT EXISTS idx_reward_redemptions_status         ON reward_redemptions(status);
 
 
 -- ─────────────────────────────────────────────────────────────
@@ -70,6 +70,57 @@ $$ LANGUAGE sql SECURITY DEFINER STABLE;
 -- ─────────────────────────────────────────────────────────────
 -- RLS POLICIES — Reglur um hver má sjá/breyta hverju
 -- ─────────────────────────────────────────────────────────────
+-- Endurkeyrsla: fjarlægja eldri policy með sama nafni á undan
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+DROP POLICY IF EXISTS "Parents can view own children" ON children;
+DROP POLICY IF EXISTS "Parents can insert own children" ON children;
+DROP POLICY IF EXISTS "Parents can update own children" ON children;
+DROP POLICY IF EXISTS "Parents can view child settings" ON child_settings;
+DROP POLICY IF EXISTS "Parents can insert child settings" ON child_settings;
+DROP POLICY IF EXISTS "Parents can update child settings" ON child_settings;
+DROP POLICY IF EXISTS "Parents can view math settings" ON child_math_settings;
+DROP POLICY IF EXISTS "Parents can insert math settings" ON child_math_settings;
+DROP POLICY IF EXISTS "Parents can update math settings" ON child_math_settings;
+DROP POLICY IF EXISTS "Parents can view reading settings" ON child_reading_settings;
+DROP POLICY IF EXISTS "Parents can insert reading settings" ON child_reading_settings;
+DROP POLICY IF EXISTS "Parents can update reading settings" ON child_reading_settings;
+DROP POLICY IF EXISTS "Parents can view own tasks" ON tasks;
+DROP POLICY IF EXISTS "Parents can insert own tasks" ON tasks;
+DROP POLICY IF EXISTS "Parents can update own tasks" ON tasks;
+DROP POLICY IF EXISTS "Parents can view child math sessions" ON math_sessions;
+DROP POLICY IF EXISTS "Parents can insert child math sessions" ON math_sessions;
+DROP POLICY IF EXISTS "Parents can update child math sessions" ON math_sessions;
+DROP POLICY IF EXISTS "Parents can view child math questions" ON math_session_questions;
+DROP POLICY IF EXISTS "Parents can insert child math questions" ON math_session_questions;
+DROP POLICY IF EXISTS "Anyone can view active system texts" ON reading_texts;
+DROP POLICY IF EXISTS "Parents can view own custom texts" ON reading_texts;
+DROP POLICY IF EXISTS "Parents can insert custom texts" ON reading_texts;
+DROP POLICY IF EXISTS "Parents can update own custom texts" ON reading_texts;
+DROP POLICY IF EXISTS "Parents can view child favorites" ON child_favorite_texts;
+DROP POLICY IF EXISTS "Parents can insert child favorites" ON child_favorite_texts;
+DROP POLICY IF EXISTS "Parents can delete child favorites" ON child_favorite_texts;
+DROP POLICY IF EXISTS "Parents can view child reading sessions" ON reading_sessions;
+DROP POLICY IF EXISTS "Parents can insert child reading sessions" ON reading_sessions;
+DROP POLICY IF EXISTS "Parents can update child reading sessions" ON reading_sessions;
+DROP POLICY IF EXISTS "Parents can view own multipliers" ON point_multipliers;
+DROP POLICY IF EXISTS "Parents can insert own multipliers" ON point_multipliers;
+DROP POLICY IF EXISTS "Parents can update own multipliers" ON point_multipliers;
+DROP POLICY IF EXISTS "Parents can delete own multipliers" ON point_multipliers;
+DROP POLICY IF EXISTS "Parents can view child ledger" ON points_ledger;
+DROP POLICY IF EXISTS "Parents can insert child ledger" ON points_ledger;
+DROP POLICY IF EXISTS "Parents can view own rewards" ON rewards;
+DROP POLICY IF EXISTS "Parents can insert own rewards" ON rewards;
+DROP POLICY IF EXISTS "Parents can update own rewards" ON rewards;
+DROP POLICY IF EXISTS "Parents can view child redemptions" ON reward_redemptions;
+DROP POLICY IF EXISTS "Parents can insert child redemptions" ON reward_redemptions;
+DROP POLICY IF EXISTS "Parents can update child redemptions" ON reward_redemptions;
+DROP POLICY IF EXISTS "Parents can view child daily stats" ON child_daily_stats;
+DROP POLICY IF EXISTS "Parents can insert child daily stats" ON child_daily_stats;
+DROP POLICY IF EXISTS "Parents can update child daily stats" ON child_daily_stats;
+DROP POLICY IF EXISTS "Parents can view child weekly stats" ON child_weekly_stats;
+DROP POLICY IF EXISTS "Parents can insert child weekly stats" ON child_weekly_stats;
+DROP POLICY IF EXISTS "Parents can update child weekly stats" ON child_weekly_stats;
 
 -- profiles: Notandi sér aðeins eigin prófíl
 CREATE POLICY "Users can view own profile"    ON profiles FOR SELECT USING (id = auth.uid());

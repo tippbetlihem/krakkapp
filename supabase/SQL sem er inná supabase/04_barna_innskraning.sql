@@ -10,7 +10,7 @@
 -- 2) Bætir við dálkum: children.login_username, children.password_hash
 -- 3) Býr til child_auth_sessions (token eftir innskráningu)
 -- 4) krakkapp_child_login(notendanafn, lykilorð) — fyrir anon (barn)
--- 5) krakkapp_parent_create_child(...) — fyrir innskráðan foreldri
+-- 5) krakkapp_parent_create_child(nafn, notendanafn, lykilorð [, birtingarnafn] [, fæðingardagur]) — authenticated
 -- 6) krakkapp_child_session_profile + krakkapp_child_logout
 --
 -- Ef þú áttir eldri útgáfu með UUID+PIN: keyrðu þessa skrá — hún DROPpar
@@ -118,12 +118,13 @@ GRANT EXECUTE ON FUNCTION public.krakkapp_child_login(TEXT, TEXT) TO anon, authe
 -- ─────────────────────────────────────────────────────────────
 -- E) Foreldri býr til barn (nafn + notendanafn + lykilorð)
 -- ─────────────────────────────────────────────────────────────
+-- Nauðsynleg fyrst, valfrjálst síðast (DEFAULT NULL) svo PostgREST geti sleppt lyklum í RPC-kalli.
 CREATE OR REPLACE FUNCTION public.krakkapp_parent_create_child(
   p_first_name TEXT,
-  p_display_name TEXT,
   p_login_username TEXT,
   p_password TEXT,
-  p_birth_date DATE
+  p_display_name TEXT DEFAULT NULL,
+  p_birth_date DATE DEFAULT NULL
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -163,7 +164,10 @@ BEGIN
   VALUES (
     auth.uid(),
     trim(p_first_name),
-    NULLIF(trim(p_display_name), ''),
+    CASE
+      WHEN p_display_name IS NULL THEN NULL
+      ELSE NULLIF(trim(p_display_name), '')
+    END,
     v_uname,
     crypt(trim(p_password), gen_salt('bf')),
     p_birth_date,

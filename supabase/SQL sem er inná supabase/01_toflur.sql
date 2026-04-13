@@ -1,6 +1,8 @@
 -- ╔═══════════════════════════════════════════════════════════════╗
 -- ║  KrakkApp — Skref 1: Allar töflur                          ║
 -- ║  Keyrðu þetta FYRST í Supabase SQL Editor                  ║
+-- ║  ATH: CREATE TABLE IF NOT EXISTS — hægt að keyra aftur ef                ║
+-- ║  grunnur er þegar til (sleppur töflum sem eru til).         ║
 -- ╚═══════════════════════════════════════════════════════════════╝
 
 
@@ -22,7 +24,7 @@ $$ LANGUAGE plpgsql;
 -- ═════════════════════════════════════════════════════════════
 -- Þegar notandi skráir sig búum við til röð hér sjálfkrafa (trigger í skref 3)
 
-CREATE TABLE profiles (
+CREATE TABLE IF NOT EXISTS profiles (
     id            UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE RESTRICT,
     email         TEXT NOT NULL UNIQUE,
     full_name     TEXT,
@@ -33,6 +35,7 @@ CREATE TABLE profiles (
     last_login_at TIMESTAMPTZ
 );
 
+DROP TRIGGER IF EXISTS trg_profiles_updated_at ON profiles;
 CREATE TRIGGER trg_profiles_updated_at
     BEFORE UPDATE ON profiles
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -44,7 +47,7 @@ CREATE TRIGGER trg_profiles_updated_at
 -- Hvert barn tilheyrir foreldri. Stig, streak og teljarar eru hér.
 -- is_active = false í stað þess að eyða barni.
 
-CREATE TABLE children (
+CREATE TABLE IF NOT EXISTS children (
     id                               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     parent_id                        UUID NOT NULL REFERENCES profiles(id) ON DELETE RESTRICT,
     first_name                       TEXT NOT NULL,
@@ -67,6 +70,7 @@ CREATE TABLE children (
     longest_streak_days              INTEGER NOT NULL DEFAULT 0
 );
 
+DROP TRIGGER IF EXISTS trg_children_updated_at ON children;
 CREATE TRIGGER trg_children_updated_at
     BEFORE UPDATE ON children
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -77,7 +81,7 @@ CREATE TRIGGER trg_children_updated_at
 -- ═════════════════════════════════════════════════════════════
 -- Ein röð per barn. Búin til sjálfkrafa þegar barn bætist við (trigger í skref 3)
 
-CREATE TABLE child_settings (
+CREATE TABLE IF NOT EXISTS child_settings (
     id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     child_id           UUID NOT NULL UNIQUE REFERENCES children(id) ON DELETE RESTRICT,
     daily_points_goal  INTEGER,          -- dagmarkmið (valfrjálst)
@@ -90,6 +94,7 @@ CREATE TABLE child_settings (
     updated_at         TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+DROP TRIGGER IF EXISTS trg_child_settings_updated_at ON child_settings;
 CREATE TRIGGER trg_child_settings_updated_at
     BEFORE UPDATE ON child_settings
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -100,7 +105,7 @@ CREATE TRIGGER trg_child_settings_updated_at
 -- ═════════════════════════════════════════════════════════════
 -- Foreldri velur erfiðleikastig, leyfðar aðgerðir, talnabil o.s.frv.
 
-CREATE TABLE child_math_settings (
+CREATE TABLE IF NOT EXISTS child_math_settings (
     id                          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     child_id                    UUID NOT NULL UNIQUE REFERENCES children(id) ON DELETE RESTRICT,
     difficulty_label            TEXT NOT NULL DEFAULT 'easy'
@@ -123,6 +128,7 @@ CREATE TABLE child_math_settings (
     CONSTRAINT chk_math_question_count CHECK (question_count > 0)
 );
 
+DROP TRIGGER IF EXISTS trg_child_math_settings_updated_at ON child_math_settings;
 CREATE TRIGGER trg_child_math_settings_updated_at
     BEFORE UPDATE ON child_math_settings
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -133,7 +139,7 @@ CREATE TRIGGER trg_child_math_settings_updated_at
 -- ═════════════════════════════════════════════════════════════
 -- Barnið fær full stig ef nákvæmni er yfir threshold, annars 0.
 
-CREATE TABLE child_reading_settings (
+CREATE TABLE IF NOT EXISTS child_reading_settings (
     id                         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     child_id                   UUID NOT NULL UNIQUE REFERENCES children(id) ON DELETE RESTRICT,
     difficulty_level           TEXT NOT NULL DEFAULT 'beginner'
@@ -148,6 +154,7 @@ CREATE TABLE child_reading_settings (
     updated_at                 TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+DROP TRIGGER IF EXISTS trg_child_reading_settings_updated_at ON child_reading_settings;
 CREATE TRIGGER trg_child_reading_settings_updated_at
     BEFORE UPDATE ON child_reading_settings
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -159,7 +166,7 @@ CREATE TRIGGER trg_child_reading_settings_updated_at
 -- Flæði: pending → submitted (barn skilar) → approved/rejected (foreldri)
 -- Rejected fer aftur í pending.
 
-CREATE TABLE tasks (
+CREATE TABLE IF NOT EXISTS tasks (
     id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     parent_id               UUID NOT NULL REFERENCES profiles(id) ON DELETE RESTRICT,
     child_id                UUID NOT NULL REFERENCES children(id) ON DELETE RESTRICT,
@@ -184,6 +191,7 @@ CREATE TABLE tasks (
     completion_time_seconds INTEGER
 );
 
+DROP TRIGGER IF EXISTS trg_tasks_updated_at ON tasks;
 CREATE TRIGGER trg_tasks_updated_at
     BEFORE UPDATE ON tasks
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -194,7 +202,7 @@ CREATE TRIGGER trg_tasks_updated_at
 -- ═════════════════════════════════════════════════════════════
 -- settings_snapshot geymir afrit af stillingum þegar lota byrjar.
 
-CREATE TABLE math_sessions (
+CREATE TABLE IF NOT EXISTS math_sessions (
     id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     child_id            UUID NOT NULL REFERENCES children(id) ON DELETE RESTRICT,
     settings_snapshot   JSONB NOT NULL,     -- afrit af math_settings við byrjun
@@ -219,7 +227,7 @@ CREATE TABLE math_sessions (
 -- ═════════════════════════════════════════════════════════════
 -- CASCADE eyðing: ef lota eyðist, eyðast spurningarnar líka.
 
-CREATE TABLE math_session_questions (
+CREATE TABLE IF NOT EXISTS math_session_questions (
     id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     math_session_id  UUID NOT NULL REFERENCES math_sessions(id) ON DELETE CASCADE,
     question_order   INTEGER NOT NULL,
@@ -243,7 +251,7 @@ CREATE TABLE math_session_questions (
 -- is_system_text = true: texti sem kemur með appinu
 -- is_system_text = false: texti sem foreldri bjó til
 
-CREATE TABLE reading_texts (
+CREATE TABLE IF NOT EXISTS reading_texts (
     id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title                TEXT NOT NULL,
     text_content         TEXT NOT NULL,
@@ -262,6 +270,7 @@ CREATE TABLE reading_texts (
     updated_at           TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+DROP TRIGGER IF EXISTS trg_reading_texts_updated_at ON reading_texts;
 CREATE TRIGGER trg_reading_texts_updated_at
     BEFORE UPDATE ON reading_texts
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -271,7 +280,7 @@ CREATE TRIGGER trg_reading_texts_updated_at
 -- 10. CHILD_FAVORITE_TEXTS — Uppáhalds textar per barn
 -- ═════════════════════════════════════════════════════════════
 
-CREATE TABLE child_favorite_texts (
+CREATE TABLE IF NOT EXISTS child_favorite_texts (
     id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     child_id             UUID NOT NULL REFERENCES children(id) ON DELETE RESTRICT,
     reading_text_id      UUID NOT NULL REFERENCES reading_texts(id) ON DELETE RESTRICT,
@@ -287,7 +296,7 @@ CREATE TABLE child_favorite_texts (
 -- Barn les texta upphátt. Appið metur nákvæmni.
 -- threshold_met = true ef nákvæmni ≥ threshold → fær stig.
 
-CREATE TABLE reading_sessions (
+CREATE TABLE IF NOT EXISTS reading_sessions (
     id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     child_id               UUID NOT NULL REFERENCES children(id) ON DELETE RESTRICT,
     reading_text_id        UUID NOT NULL REFERENCES reading_texts(id) ON DELETE RESTRICT,
@@ -321,7 +330,7 @@ CREATE TABLE reading_sessions (
 -- Foreldri býr til bónus (t.d. "Helgarbónus! 2x stig")
 -- child_id = null → gildir fyrir öll börn
 
-CREATE TABLE point_multipliers (
+CREATE TABLE IF NOT EXISTS point_multipliers (
     id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     parent_id        UUID NOT NULL REFERENCES profiles(id) ON DELETE RESTRICT,
     child_id         UUID REFERENCES children(id) ON DELETE RESTRICT,
@@ -345,7 +354,7 @@ CREATE TABLE point_multipliers (
 -- Hver einasta stigafærsla. Credit = fær stig, Debit = eyðir stigum.
 -- ENGIN uppfærsla eða eyðing leyfð (tryggð með rules).
 
-CREATE TABLE points_ledger (
+CREATE TABLE IF NOT EXISTS points_ledger (
     id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     child_id             UUID NOT NULL REFERENCES children(id) ON DELETE RESTRICT,
     source_type          TEXT NOT NULL
@@ -365,6 +374,8 @@ CREATE TABLE points_ledger (
 );
 
 -- Loka á UPDATE og DELETE — stigabókhaldið er óbreytanlegt
+DROP RULE IF EXISTS rule_points_ledger_no_update ON points_ledger;
+DROP RULE IF EXISTS rule_points_ledger_no_delete ON points_ledger;
 CREATE RULE rule_points_ledger_no_update AS
     ON UPDATE TO points_ledger DO INSTEAD NOTHING;
 CREATE RULE rule_points_ledger_no_delete AS
@@ -376,7 +387,7 @@ CREATE RULE rule_points_ledger_no_delete AS
 -- ═════════════════════════════════════════════════════════════
 -- child_id = null → öll börn sjá verðlaunin
 
-CREATE TABLE rewards (
+CREATE TABLE IF NOT EXISTS rewards (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     parent_id   UUID NOT NULL REFERENCES profiles(id) ON DELETE RESTRICT,
     child_id    UUID REFERENCES children(id) ON DELETE RESTRICT,
@@ -390,6 +401,7 @@ CREATE TABLE rewards (
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+DROP TRIGGER IF EXISTS trg_rewards_updated_at ON rewards;
 CREATE TRIGGER trg_rewards_updated_at
     BEFORE UPDATE ON rewards
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -401,7 +413,7 @@ CREATE TRIGGER trg_rewards_updated_at
 -- Barn biður um verðlaun → foreldri samþykkir/hafnar/uppfyllir
 -- Ef hafnað → stig skilað til baka
 
-CREATE TABLE reward_redemptions (
+CREATE TABLE IF NOT EXISTS reward_redemptions (
     id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     reward_id    UUID NOT NULL REFERENCES rewards(id) ON DELETE RESTRICT,
     child_id     UUID NOT NULL REFERENCES children(id) ON DELETE RESTRICT,
@@ -420,7 +432,7 @@ CREATE TABLE reward_redemptions (
 -- ═════════════════════════════════════════════════════════════
 -- Ein röð per barn per dag. Uppfærð sjálfkrafa af triggers (skref 3).
 
-CREATE TABLE child_daily_stats (
+CREATE TABLE IF NOT EXISTS child_daily_stats (
     id                         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     child_id                   UUID NOT NULL REFERENCES children(id) ON DELETE RESTRICT,
     stat_date                  DATE NOT NULL,
@@ -449,6 +461,7 @@ CREATE TABLE child_daily_stats (
     UNIQUE (child_id, stat_date)
 );
 
+DROP TRIGGER IF EXISTS trg_child_daily_stats_updated_at ON child_daily_stats;
 CREATE TRIGGER trg_child_daily_stats_updated_at
     BEFORE UPDATE ON child_daily_stats
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -459,7 +472,7 @@ CREATE TRIGGER trg_child_daily_stats_updated_at
 -- ═════════════════════════════════════════════════════════════
 -- Rúllað saman úr daily_stats, annað hvort sjálfkrafa eða með cron.
 
-CREATE TABLE child_weekly_stats (
+CREATE TABLE IF NOT EXISTS child_weekly_stats (
     id                         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     child_id                   UUID NOT NULL REFERENCES children(id) ON DELETE RESTRICT,
     week_start_date            DATE NOT NULL,       -- alltaf mánudagur
@@ -488,6 +501,7 @@ CREATE TABLE child_weekly_stats (
     CONSTRAINT chk_week_range CHECK (week_end_date = week_start_date + INTERVAL '6 days')
 );
 
+DROP TRIGGER IF EXISTS trg_child_weekly_stats_updated_at ON child_weekly_stats;
 CREATE TRIGGER trg_child_weekly_stats_updated_at
     BEFORE UPDATE ON child_weekly_stats
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

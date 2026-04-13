@@ -52,18 +52,26 @@ export async function createChild(
 
   const { data, error } = await supabase.rpc("krakkapp_parent_create_child", {
     p_first_name: firstName,
-    p_display_name: displayName || null,
     p_login_username: username,
     p_password: password,
+    p_display_name: displayName || null,
     p_birth_date: birthDateRaw ? birthDateRaw : null,
   });
 
   if (error) {
     const msg = error.message ?? "";
-    if (/function .* does not exist|PGRST202/i.test(msg)) {
+    const code = (error as { code?: string }).code ?? "";
+    const missingRpc =
+      /function .* does not exist|PGRST202|schema cache|Could not find the function/i.test(
+        msg + " " + code
+      );
+    if (missingRpc) {
       return {
         error:
-          "Gagnagrunnurinn er ekki uppfærður. Keyrðu supabase/SQL sem er inná supabase/04_barna_innskraning.sql í Supabase.",
+          "Gagnagrunnurinn þekkir ekki barna-fallið krakkapp_parent_create_child. " +
+          "1) Opnaðu Supabase → SQL → límdu inn ALLA skrána „SQL sem er inná supabase/04_barna_innskraning.sql“ og keyrðu (eða supabase db push). " +
+          "2) Ef þú gerðir þetta þegar: Project settings → API → „Reload schema“ (eða bíddu 1–2 mín.). " +
+          "3) Athugaðu að Vercel/.env noti sama Supabase-verkefni og þú keyrir SQL á.",
       };
     }
     return { error: msg || "Ekki tókst að búa til barn." };

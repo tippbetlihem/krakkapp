@@ -1,10 +1,27 @@
 # KrakkApp — SQL Leiðbeiningar
 
-**Gildandi handkeyrsluskrár** fyrir Supabase liggja í **þessari möppu** (`SQL sem er inná supabase`). Aðrar slóðir í verkefninu geta vísað hingað.
+**Gildandi handkeyrsluskrár** fyrir Supabase liggja **aðeins í þessari möppu**:  
+`supabase/SQL sem er inná supabase/`
+
+| Skrá | Hlutverk |
+|------|----------|
+| `00_allt_i_einni_keyrslu.sql` | **Allt í einu** — sama og 01+02+03+04; má keyra aftur á grunni sem er þegar til (IF NOT EXISTS, DROP … IF EXISTS). |
+| `01_toflur.sql` | Töflur og `update_updated_at_column` |
+| `02_indexes_og_oryggi.sql` | Vísar og RLS |
+| `03_triggers_og_sjoalfvirkt.sql` | Triggers og sjálfvirkni |
+| `04_barna_innskraning.sql` | Barna-innskráning (notendanafn + lykilorð), `child_auth_sessions`, RPC-föll |
+
+**`supabase/migrations/`** (aðrar möppur) eru fyrir `supabase db push` / CLI — **ekki** það sem þú þarft að límja handvirkt nema þú sért að nota Supabase CLI. Uppspretta fyrir handkeyrslu er **þessi mappa**.
 
 ## Hvernig á að keyra
 
-Farðu í **Supabase Dashboard > SQL Editor** og keyrðu skrárnar í þessari röð:
+Farðu í **Supabase Dashboard → SQL Editor**.
+
+### A) Nýtt verkefni eða full endurbygging
+Keyrðu **`00_allt_i_einni_keyrslu.sql`** (eitt skref), eða skrárnar **01 → 02 → 03 → 04** í röð.
+
+### B) Uppfærsla á starfandi grunni
+Keyrðu oftast aðeins **`04_barna_innskraning.sql`** (eða viðeigandi stök skref) svo þú skemmir ekki gögn.
 
 ### Skref 1: `01_toflur.sql`
 Býr til allar 17 töflurnar og grunn trigger-a.
@@ -37,7 +54,7 @@ Býr til allar 17 töflurnar og grunn trigger-a.
 - Keyrðu **eftir** skref 3
 
 ## Ef villa kemur upp
-- Keyrðu skrárnar í réttri röð (1 → 2 → 3 → 4)
+- Keyrðu skrárnar í réttri röð (1 → 2 → 3 → 4), eða notaðu `00` á tómu grunni
 - Ef tafla er nú þegar til, keyrðu `DROP TABLE IF EXISTS <nafn> CASCADE;` fyrst
 - Ef þú vilt byrja alveg upp á nýtt, keyrðu þetta:
   ```sql
@@ -46,4 +63,4 @@ Býr til allar 17 töflurnar og grunn trigger-a.
   GRANT ALL ON SCHEMA public TO postgres;
   GRANT ALL ON SCHEMA public TO public;
   ```
-  og keyrðu svo allt aftur.
+  og keyrðu svo `00_allt_i_einni_keyrslu.sql` (eða 01–04 aftur).
