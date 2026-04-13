@@ -35,10 +35,10 @@ export default function AuthLayout({
               <p className="text-gold-300 text-xs font-bold uppercase tracking-widest mb-2">
                 Fyrir börn og foreldra
               </p>
-              <h2 className="text-white text-2xl font-extrabold leading-snug">
+              {/*<h2 className="text-white text-2xl font-extrabold leading-snug">
                 Læra, vinna<br />
                 og hafa gaman.
-              </h2>
+              </h2>*/}
             </div>
 
             {/* Spacer */}
@@ -64,7 +64,7 @@ export default function AuthLayout({
               src="/mascots/green.png"
               alt="KrakkApp mascot"
               fill
-              style={{ inset: "-96px 0px 0px -10px" }}
+              style={{ inset: "-89px 0px 0px 17px", height: "430px" }}
               className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
             />
           </div>
@@ -74,7 +74,7 @@ export default function AuthLayout({
               src="/mascots/orange.png"
               alt="KrakkApp mascot"
               fill
-              style={{ inset: "-99px 0px 0px -27px" }}
+              style={{ inset: "-47px 0px 0px -5px" }}
               className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
             />
           </div>
