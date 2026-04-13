@@ -58,21 +58,23 @@ export default function AuthLayout({
           </div>
 
           {/* Mascots — overflow into white area, above tagline */}
-          {/* Green mascot — in front, far left */}
-          <div className="absolute -bottom-6 -left-36 z-30 w-[480px] h-[480px] animate-[float2_8s_ease-in-out_infinite]">
+          {/* Green mascot — slightly behind */}
+          <div className="absolute -bottom-6 -left-36 z-20 w-[480px] h-[480px] animate-[float2_8s_ease-in-out_infinite]">
             <Image
               src="/mascots/green.png"
               alt="KrakkApp mascot"
               fill
+              style={{ inset: "-96px 0px 0px -10px" }}
               className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
             />
           </div>
-          {/* Orange mascot — behind green, overlapping */}
-          <div className="absolute -bottom-2 left-24 z-20 w-[360px] h-[360px] animate-[float1_7s_ease-in-out_infinite]">
+          {/* Orange mascot — in front */}
+          <div className="absolute -bottom-2 left-24 z-30 w-[360px] h-[360px] animate-[float1_7s_ease-in-out_infinite]">
             <Image
               src="/mascots/orange.png"
               alt="KrakkApp mascot"
               fill
+              style={{ inset: "-99px 0px 0px -27px" }}
               className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
             />
           </div>
