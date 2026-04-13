@@ -11,42 +11,25 @@ type LoginRpcResult = {
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
 
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-function isValidChildUuid(value: string): boolean {
-  return UUID_RE.test(value);
-}
-
 export async function POST(request: Request) {
-  let body: { childId?: string; pin?: string };
+  let body: { username?: string; password?: string };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const childId = typeof body.childId === "string" ? body.childId.trim() : "";
-  const pin = typeof body.pin === "string" ? body.pin.trim() : "";
+  const username = typeof body.username === "string" ? body.username.trim() : "";
+  const password = typeof body.password === "string" ? body.password : "";
 
-  if (!childId || !pin) {
+  if (!username || !password) {
     return NextResponse.json({ error: "missing_fields" }, { status: 400 });
-  }
-
-  if (!isValidChildUuid(childId)) {
-    return NextResponse.json(
-      {
-        error: "invalid_child_id",
-        hint: "Notaðu ekki nafn barns — afritaðu langa kóðann (UUID) undir „Börn“ í foreldragátt.",
-      },
-      { status: 400 }
-    );
   }
 
   const supabase = createAnonClient();
   const { data, error } = await supabase.rpc("krakkapp_child_login", {
-    p_child_id: childId,
-    p_pin: pin,
+    p_username: username,
+    p_password: password,
   });
 
   if (error) {
@@ -59,7 +42,7 @@ export async function POST(request: Request) {
         error: "rpc_error",
         message: error.message,
         hint: missingFn
-          ? "Keyrðu SQL-skrána 04_barna_innskraning.sql í Supabase (föllin krakkapp_child_*)."
+          ? "Keyrðu SQL sem er inná supabase/04_barna_innskraning.sql í Supabase (krakkapp_child_login með notendanafni)."
           : undefined,
       },
       { status: 500 }

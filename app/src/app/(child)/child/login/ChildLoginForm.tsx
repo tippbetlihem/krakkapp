@@ -5,30 +5,29 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Sparkles } from "lucide-react";
 
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
 function ChildLoginFormInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [childId, setChildId] = useState("");
-  const [pin, setPin] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const q = searchParams.get("child");
-    if (q) setChildId(q.trim());
+    const u = searchParams.get("u");
+    if (u) setUsername(u.trim());
   }, [searchParams]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    const id = childId.trim();
-    if (!UUID_RE.test(id)) {
-      setError(
-        "Barna-ID er ekki nafn barns — það er langur kóði með bandstriki (UUID). Opnaðu „Börn“ í foreldragátt og smelltu „Afrita ID“."
-      );
+    const u = username.trim();
+    if (u.length < 2) {
+      setError("Sláðu inn notendanafn.");
+      return;
+    }
+    if (!password) {
+      setError("Sláðu inn lykilorð.");
       return;
     }
 
@@ -37,7 +36,7 @@ function ChildLoginFormInner() {
     const res = await fetch("/api/child/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ childId: id, pin: pin.trim() }),
+      body: JSON.stringify({ username: u, password }),
     });
 
     setLoading(false);
@@ -48,14 +47,12 @@ function ChildLoginFormInner() {
         hint?: string;
         message?: string;
       };
-      if (body.error === "invalid_child_id" && body.hint) {
-        setError(body.hint);
-      } else if (body.error === "invalid_credentials" || body.error === "invalid_pin") {
-        setError("Rangt barna-ID eða PIN. Athugaðu að PIN sé stilltur í gagnagrunni (a.m.k. 4 stafir).");
+      if (body.error === "invalid_credentials" || body.error === "invalid_username") {
+        setError("Rangt notendanafn eða lykilorð.");
       } else if (body.error === "rpc_error") {
         setError(
           body.hint ??
-            "Tenging við gagnagrunn virkar ekki. Ef þú hefur ekki keyrt SQL fyrir barna-innskráningu, gerðu það í Supabase."
+            "Tenging við gagnagrunn virkar ekki. Athugaðu að SQL fyrir barna-innskráningu sé keyrt í Supabase."
         );
       } else {
         setError("Ekki tókst að skrá inn. Reyndu aftur.");
@@ -88,41 +85,36 @@ function ChildLoginFormInner() {
         )}
 
         <div>
-          <label htmlFor="childId" className="mb-1 block text-xs font-semibold text-neutral-600">
-            Barna-ID
+          <label htmlFor="child_username" className="mb-1 block text-xs font-semibold text-neutral-600">
+            Notendanafn
           </label>
           <input
-            id="childId"
+            id="child_username"
             type="text"
-            autoComplete="off"
-            placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-            value={childId}
-            onChange={(e) => setChildId(e.target.value)}
+            autoComplete="username"
+            placeholder="Sama og foreldrið valdi"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2.5 font-mono text-sm outline-none focus:border-evergreen-400 focus:ring-2 focus:ring-evergreen-100"
             required
+            minLength={2}
             spellCheck={false}
           />
-          <p className="mt-1 text-[11px] leading-snug text-neutral-500">
-            <strong className="text-neutral-600">Ekki nafn barns.</strong> Foreldrið fer í{" "}
-            <span className="font-semibold">Börn</span>, afritar langa kóðann (UUID) með „Afrita ID“.
-          </p>
         </div>
 
         <div>
-          <label htmlFor="pin" className="mb-1 block text-xs font-semibold text-neutral-600">
-            PIN-númer
+          <label htmlFor="child_password" className="mb-1 block text-xs font-semibold text-neutral-600">
+            Lykilorð
           </label>
           <input
-            id="pin"
+            id="child_password"
             type="password"
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            placeholder="A.m.k. 4 stafir"
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
+            autoComplete="current-password"
+            placeholder="Lykilorð barnsins"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2.5 text-sm outline-none focus:border-evergreen-400 focus:ring-2 focus:ring-evergreen-100"
             required
-            minLength={4}
           />
         </div>
 
@@ -147,7 +139,11 @@ function ChildLoginFormInner() {
 
 export function ChildLoginForm() {
   return (
-    <Suspense fallback={<div className="mx-auto max-w-sm animate-pulse rounded-3xl bg-white/60 p-6 h-64" />}>
+    <Suspense
+      fallback={
+        <div className="mx-auto h-64 max-w-sm animate-pulse rounded-3xl bg-white/60 p-6" />
+      }
+    >
       <ChildLoginFormInner />
     </Suspense>
   );

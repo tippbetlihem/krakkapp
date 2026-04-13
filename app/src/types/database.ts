@@ -18,6 +18,8 @@ export type Child = {
   birth_date: string | null;
   avatar_url: string | null;
   pin_code: string | null;
+  login_username: string | null;
+  password_hash: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;

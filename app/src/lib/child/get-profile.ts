@@ -8,6 +8,7 @@ type RpcSessionResult = {
     id: string;
     first_name: string;
     display_name: string | null;
+    login_username?: string | null;
     available_points: number;
     current_streak_days: number;
   };
@@ -28,6 +29,7 @@ export async function fetchChildSessionProfile(
     id: c.id,
     first_name: c.first_name,
     display_name: c.display_name,
+    login_username: c.login_username ?? null,
     available_points: Number(c.available_points) || 0,
     current_streak_days: Number(c.current_streak_days) || 0,
   };

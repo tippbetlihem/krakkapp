@@ -1,5 +1,7 @@
 # KrakkApp — SQL Leiðbeiningar
 
+**Gildandi handkeyrsluskrár** fyrir Supabase liggja í **þessari möppu** (`SQL sem er inná supabase`). Aðrar slóðir í verkefninu geta vísað hingað.
+
 ## Hvernig á að keyra
 
 Farðu í **Supabase Dashboard > SQL Editor** og keyrðu skrárnar í þessari röð:
@@ -29,8 +31,13 @@ Býr til allar 17 töflurnar og grunn trigger-a.
 - Streak reiknuð sjálfkrafa
 - Vikuleg samantekt (fall til að kalla á)
 
+### Skref 4: `04_barna_innskraning.sql`
+- Barna-innskráning með notendanafni og lykilorði (bcrypt)
+- `child_auth_sessions`, RPC-föll (`krakkapp_child_login`, `krakkapp_parent_create_child`, o.fl.)
+- Keyrðu **eftir** skref 3
+
 ## Ef villa kemur upp
-- Keyrðu skrárnar í réttri röð (1 → 2 → 3)
+- Keyrðu skrárnar í réttri röð (1 → 2 → 3 → 4)
 - Ef tafla er nú þegar til, keyrðu `DROP TABLE IF EXISTS <nafn> CASCADE;` fyrst
 - Ef þú vilt byrja alveg upp á nýtt, keyrðu þetta:
   ```sql

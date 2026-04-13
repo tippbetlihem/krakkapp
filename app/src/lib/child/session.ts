@@ -11,6 +11,7 @@ export type ChildSessionPayload = {
   id: string;
   first_name: string;
   display_name: string | null;
+  login_username: string | null;
   available_points: number;
   current_streak_days: number;
 };
