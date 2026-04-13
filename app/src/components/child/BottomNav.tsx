@@ -2,9 +2,10 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Calculator, BookOpen, ClipboardCheck, Gift } from "lucide-react";
+import { Home, Calculator, BookOpen, ClipboardCheck, Gift } from "lucide-react";
 
 const tabs = [
+  { href: "/child/home", label: "Heim", icon: Home },
   { href: "/child/math", label: "Stærðfræði", icon: Calculator },
   { href: "/child/reading", label: "Lestur", icon: BookOpen },
   { href: "/child/tasks", label: "Verkefni", icon: ClipboardCheck },
@@ -15,8 +16,8 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 bg-white border-t border-neutral-200 z-40">
-      <div className="flex max-w-md mx-auto">
+    <nav className="fixed bottom-0 inset-x-0 z-40 border-t border-neutral-200 bg-white">
+      <div className="mx-auto flex max-w-md">
         {tabs.map((tab) => {
           const isActive = pathname.startsWith(tab.href);
           return (

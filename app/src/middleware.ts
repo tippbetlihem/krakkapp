@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -30,15 +30,29 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
+  const childToken = request.cookies.get("krakkapp_child_token")?.value;
+  const hasChildSession = Boolean(childToken && childToken.length >= 16);
 
-  // Auth pages — redirect logged-in users to dashboard
+  if (pathname === "/child") {
+    const url = request.nextUrl.clone();
+    url.pathname = hasChildSession ? "/child/home" : "/child/login";
+    return NextResponse.redirect(url);
+  }
+
+  if (pathname.startsWith("/child") && !pathname.startsWith("/child/login")) {
+    if (!hasChildSession) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/child/login";
+      return NextResponse.redirect(url);
+    }
+  }
+
   if (user && ["/login", "/signup", "/forgot-password"].includes(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
-  // Protected parent routes — redirect to login
   const protectedPrefixes = ["/dashboard", "/children", "/tasks", "/rewards", "/settings"];
   if (!user && protectedPrefixes.some((p) => pathname.startsWith(p))) {
     const url = request.nextUrl.clone();
@@ -59,5 +73,7 @@ export const config = {
     "/login",
     "/signup",
     "/forgot-password",
+    "/child",
+    "/child/:path*",
   ],
 };

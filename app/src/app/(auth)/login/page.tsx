@@ -118,6 +118,16 @@ export default function LoginPage() {
           Nýskrá &rarr;
         </Link>
       </p>
+
+      <p className="text-center text-sm text-neutral-500">
+        Barn að skrá sig inn?{" "}
+        <Link
+          href="/child/login"
+          className="font-bold text-evergreen-600 hover:text-evergreen-700 transition-colors"
+        >
+          KrakkApp fyrir börn &rarr;
+        </Link>
+      </p>
     </form>
   );
 }
