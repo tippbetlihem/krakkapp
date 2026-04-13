@@ -14,30 +14,37 @@ export function TopBar({ email }: { email?: string }) {
   }
 
   return (
-    <header className="h-20 bg-transparent flex items-center justify-between px-5 lg:px-8">
-      <div className="lg:hidden w-8" />
-      <div className="hidden md:flex items-center gap-2 rounded-full bg-white px-4 py-2 border border-neutral-200 text-sm text-neutral-500">
+    <header className="h-14 lg:h-16 flex items-center justify-between px-4 pl-14 lg:pl-4 lg:px-8 shrink-0">
+      {/* Left — page context badge (desktop only) */}
+      <div className="hidden md:flex items-center gap-2 rounded-full bg-white/80 px-3.5 py-1.5 border border-neutral-200/60 text-sm">
         <span className="font-semibold text-neutral-700">Foreldra mælaborð</span>
       </div>
-      <div className="flex items-center gap-4">
+
+      {/* Mobile spacer */}
+      <div className="md:hidden" />
+
+      {/* Right — actions */}
+      <div className="flex items-center gap-2 sm:gap-3">
         <button
-          className="grid h-9 w-9 place-items-center rounded-full bg-white border border-neutral-200 text-neutral-500 hover:text-neutral-700"
+          className="grid h-8 w-8 place-items-center rounded-full bg-white/80 border border-neutral-200/60 text-neutral-500 hover:text-neutral-700 transition-colors"
           aria-label="Tilkynningar"
         >
-          <Bell size={16} />
+          <Bell size={15} />
         </button>
+
         {email && (
-          <span className="text-sm text-neutral-500 hidden lg:flex items-center gap-1.5">
-            <User size={14} className="text-evergreen-500" />
+          <span className="hidden lg:flex text-xs text-neutral-500 items-center gap-1.5 max-w-[180px] truncate">
+            <User size={13} className="text-evergreen-500 shrink-0" />
             {email}
           </span>
         )}
+
         <button
           onClick={handleLogout}
-          className="text-sm text-neutral-500 hover:text-neutral-900 flex items-center gap-1.5 transition-colors"
+          className="flex items-center gap-1.5 rounded-full bg-white/80 border border-neutral-200/60 px-3 py-1.5 text-xs font-medium text-neutral-600 hover:text-neutral-900 transition-colors"
         >
-          <LogOut size={14} className="text-evergreen-500" />
-          Útskrá
+          <LogOut size={13} />
+          <span className="hidden sm:inline">Útskrá</span>
         </button>
       </div>
     </header>

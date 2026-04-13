@@ -27,10 +27,10 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile toggle */}
+      {/* Mobile toggle — sits inside the frame */}
       <button
         onClick={() => setOpen(!open)}
-        className="lg:hidden fixed top-3 left-3 z-50 p-2 rounded-xl bg-white shadow-md text-evergreen-500"
+        className="lg:hidden fixed top-3 left-3 z-50 p-2.5 rounded-2xl bg-white/90 backdrop-blur shadow-md text-evergreen-600"
         aria-label="Toggle menu"
       >
         {open ? <X size={20} /> : <Menu size={20} />}
@@ -39,31 +39,36 @@ export function Sidebar() {
       {/* Backdrop */}
       {open && (
         <div
-          className="lg:hidden fixed inset-0 z-30 bg-black/20"
+          className="lg:hidden fixed inset-0 z-30 bg-black/25 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar — icon-rail on desktop, full drawer on mobile */}
       <aside
         className={`
-          fixed top-0 left-0 z-40 h-dvh w-24 bg-[#f3f1ee] border-r border-neutral-200/70
-          flex flex-col transition-transform duration-200
-          lg:translate-x-0 lg:static lg:z-auto lg:h-auto lg:min-h-full
+          fixed inset-y-0 left-0 z-40 w-64 bg-[#f7f5f2] border-r border-neutral-200/70
+          flex flex-col transition-transform duration-200 ease-out
+          lg:w-[76px] lg:translate-x-0 lg:static lg:z-auto lg:self-stretch
           ${open ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="h-20 flex items-center justify-center border-b border-neutral-200/70">
+        {/* Brand */}
+        <div className="h-16 flex items-center gap-3 px-4 lg:justify-center lg:px-0 shrink-0">
           <Link
             href="/dashboard"
-            className="grid place-items-center h-11 w-11 rounded-2xl bg-white text-evergreen-600 shadow-sm"
+            className="grid place-items-center h-10 w-10 rounded-2xl bg-white text-evergreen-600 shadow-sm shrink-0"
             aria-label="KrakkApp heim"
           >
-            <span className="text-xl font-black">K</span>
+            <span className="text-lg font-black leading-none">K</span>
           </Link>
+          <span className="text-lg font-extrabold text-evergreen-600 lg:hidden">
+            Krakk<span className="text-gold-400">App</span>
+          </span>
         </div>
 
-        <nav className="flex-1 py-5 px-3 space-y-2">
+        {/* Nav */}
+        <nav className="flex-1 py-4 px-3 space-y-1">
           {navItems.map((item) => {
             const isActive = pathname.startsWith(item.href);
             return (
@@ -71,9 +76,10 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                aria-label={item.label}
+                title={item.label}
                 className={`
-                  flex items-center justify-center px-3 py-3 rounded-2xl text-sm font-semibold transition-all
+                  flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold transition-all
+                  lg:justify-center lg:px-0 lg:py-3
                   ${
                     isActive
                       ? "bg-neutral-900 text-white shadow-sm"
@@ -81,14 +87,16 @@ export function Sidebar() {
                   }
                 `}
               >
-                <item.icon size={18} />
-                <span className="sr-only">{item.label}</span>
+                <item.icon size={18} className="shrink-0" />
+                <span className="lg:hidden">{item.label}</span>
               </Link>
             );
           })}
         </nav>
-        <div className="px-3 pb-5">
-          <div className="mx-auto h-10 w-10 rounded-full bg-gradient-to-br from-evergreen-300 to-evergreen-500" />
+
+        {/* Avatar placeholder — bottom */}
+        <div className="px-3 pb-4 lg:flex lg:justify-center shrink-0">
+          <div className="h-9 w-9 rounded-full bg-gradient-to-br from-evergreen-300 to-evergreen-500 ring-2 ring-white" />
         </div>
       </aside>
     </>

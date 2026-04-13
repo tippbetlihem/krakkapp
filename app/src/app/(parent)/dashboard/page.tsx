@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { LayoutDashboard, Users, Flame, Star, Bell, Sparkles } from "lucide-react";
+import { LayoutDashboard, Users, Flame, Star, Bell, Settings } from "lucide-react";
 import { ChildAnalyticsCard } from "@/components/parent/ChildAnalyticsCard";
 import type { ReactNode } from "react";
 import {
@@ -31,6 +31,15 @@ function latestWeeklyPerChild(
   }
   return m;
 }
+
+const PASTEL_THEMES = [
+  { bg: "bg-[#f1cbcf]", border: "border-[#e8b5bb]" },
+  { bg: "bg-[#d5ead9]", border: "border-[#b8d9bf]" },
+  { bg: "bg-[#ffedc2]", border: "border-[#f5dea0]" },
+  { bg: "bg-[#d4dff7]", border: "border-[#bccbeb]" },
+] as const;
+
+const WEEKDAY_LABELS = ["Mán", "Þri", "Mið", "Fim", "Fös", "Lau", "Sun"];
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -71,15 +80,13 @@ export default async function DashboardPage() {
     ]);
 
     settingsByChild = new Map(
-      (settingsRes.data as ChildSettings[] | null)?.map((s) => [s.child_id, s]) ??
-        []
+      (settingsRes.data as ChildSettings[] | null)?.map((s) => [s.child_id, s]) ?? []
     );
     dailyByChild = groupDailyByChild(
       (dailyRes.data as ChildDailyStats[] | null) ?? []
     );
     todayByChild = new Map(
-      (todayRes.data as ChildDailyStats[] | null)?.map((d) => [d.child_id, d]) ??
-        []
+      (todayRes.data as ChildDailyStats[] | null)?.map((d) => [d.child_id, d]) ?? []
     );
     weeklyByChild = latestWeeklyPerChild(
       (weeklyRes.data as ChildWeeklyStats[] | null) ?? []
@@ -87,74 +94,108 @@ export default async function DashboardPage() {
   }
 
   const totalPoints = (children ?? []).reduce(
-    (sum, child) => sum + (Number(child.available_points) || 0),
-    0
+    (sum, c) => sum + (Number(c.available_points) || 0), 0
   );
   const totalStreak = (children ?? []).reduce(
-    (sum, child) => sum + (Number(child.current_streak_days) || 0),
-    0
+    (sum, c) => sum + (Number(c.current_streak_days) || 0), 0
   );
   const totalTasks = (children ?? []).reduce(
-    (sum, child) => sum + (Number(child.completed_tasks_count) || 0),
-    0
+    (sum, c) => sum + (Number(c.completed_tasks_count) || 0), 0
   );
-  const activeChildren = (children ?? []).filter((child) => Boolean(child.last_activity_at)).length;
+  const activeChildren = (children ?? []).filter((c) => Boolean(c.last_activity_at)).length;
   const totalWeeklyPoints = Array.from(weeklyByChild.values()).reduce(
-    (sum, row) => sum + (Number(row.points_earned) || 0),
-    0
+    (sum, row) => sum + (Number(row.points_earned) || 0), 0
   );
-  const featuredChildren = (children ?? []).slice(0, 4);
+
+  const dailyPointsByChild = Array.from(dailyByChild.entries()).map(([, rows]) =>
+    rows.reduce((s, r) => s + (Number(r.points_earned) || 0), 0)
+  );
+  const maxDailyPoints = Math.max(1, ...dailyPointsByChild);
+  const barHeights = dailyPointsByChild.length > 0
+    ? dailyPointsByChild.map((v) => Math.max(8, Math.round((v / maxDailyPoints) * 100)))
+    : [20, 35, 25, 50, 40, 55, 70];
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-      <div className="space-y-6">
-        <section className="rounded-[28px] bg-white border border-neutral-200 px-6 py-7">
-          <h2 className="text-3xl sm:text-4xl xl:text-5xl font-black tracking-tight text-neutral-900 leading-[0.95]">
-            Fjárfestu í
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
+      {/* ── Main column ── */}
+      <div className="space-y-6 min-w-0">
+        {/* Hero */}
+        <section className="rounded-3xl bg-white border border-neutral-200/80 px-5 py-6 sm:px-7 sm:py-8">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-neutral-900 leading-tight">
+            Fylgstu með
             <br />
-            menntun barnsins
+            framförum barnanna
           </h2>
-          <p className="mt-4 max-w-2xl text-sm text-neutral-500">
-            Mjúkt yfirlit yfir virkni, markmið og framfarir, innblásið af nýja
-            dashboard stílnum.
+          <p className="mt-3 max-w-xl text-sm text-neutral-500 leading-relaxed">
+            Stig, röð, markmið og greining — allt á einum stað.
           </p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 2xl:grid-cols-4">
-            <MetricCard label="Virk börn" value={String(activeChildren)} sub={`${children?.length ?? 0} skráð`} icon={<Users size={16} />} tone="evergreen" />
-            <MetricCard label="Stig í pússi" value={String(totalPoints)} sub="samtals núna" icon={<Star size={16} />} tone="gold" />
-            <MetricCard label="Samanlögð röð" value={String(totalStreak)} sub="dagar" icon={<Flame size={16} />} tone="info" />
-            <MetricCard label="Verkefni lokið" value={String(totalTasks)} sub="alls" icon={<LayoutDashboard size={16} />} tone="neutral" />
+
+          {/* KPI row */}
+          <div className="mt-6 grid gap-3 grid-cols-2 lg:grid-cols-4">
+            <MetricCard label="Virk börn" value={String(activeChildren)} sub={`${children?.length ?? 0} skráð`} icon={<Users size={15} />} tone="evergreen" />
+            <MetricCard label="Stig" value={String(totalPoints)} sub="í pússi" icon={<Star size={15} />} tone="gold" />
+            <MetricCard label="Röð" value={String(totalStreak)} sub="dagar" icon={<Flame size={15} />} tone="info" />
+            <MetricCard label="Verkefni" value={String(totalTasks)} sub="lokið alls" icon={<LayoutDashboard size={15} />} tone="neutral" />
           </div>
         </section>
 
+        {/* Featured children cards */}
         <section>
           <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-lg font-extrabold text-neutral-900">Mest notað</h3>
-            <button className="text-sm font-semibold text-neutral-500 hover:text-neutral-800">Sjá allt</button>
+            <h3 className="text-base font-bold text-neutral-900">Börnin þín</h3>
+            <a href="/children" className="text-xs font-semibold text-neutral-400 hover:text-neutral-700 transition-colors">
+              Sjá öll &rarr;
+            </a>
           </div>
-          {featuredChildren.length === 0 ? (
-            <div className="bg-white rounded-3xl border border-neutral-200 p-8 text-center">
+
+          {!children || children.length === 0 ? (
+            <div className="rounded-3xl border border-neutral-200 bg-white p-8 text-center">
               <p className="text-neutral-500 mb-4">Engin börn skráð ennþá.</p>
-              <a href="/children" className="inline-flex items-center gap-2 bg-evergreen-500 text-white rounded-2xl px-4 py-2 font-semibold text-sm hover:bg-evergreen-600 transition-colors">Bæta við barni</a>
+              <a
+                href="/children"
+                className="inline-flex items-center gap-2 bg-evergreen-500 text-white rounded-2xl px-4 py-2 font-semibold text-sm hover:bg-evergreen-600 transition-colors"
+              >
+                Bæta við barni
+              </a>
             </div>
           ) : (
-            <div className="grid gap-4 md:grid-cols-2">
-              {featuredChildren.map((child, idx) => (
-                <FeaturedChildCard
-                  key={child.id}
-                  childName={child.display_name || child.first_name}
-                  students={Number(child.completed_tasks_count) || 0}
-                  badge={idx % 2 === 0 ? "Top 10" : "Vinsælt"}
-                  theme={idx % 2 === 0 ? "rose" : "mint"}
-                />
-              ))}
+            <div className="grid gap-3 sm:grid-cols-2">
+              {children.slice(0, 4).map((child, idx) => {
+                const theme = PASTEL_THEMES[idx % PASTEL_THEMES.length];
+                const points = Number(child.available_points) || 0;
+                const streak = Number(child.current_streak_days) || 0;
+                const tasks = Number(child.completed_tasks_count) || 0;
+                return (
+                  <article
+                    key={child.id}
+                    className={`rounded-3xl border p-5 ${theme.bg} ${theme.border}`}
+                  >
+                    <div className="mb-4 flex items-center justify-between">
+                      <span className="rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-semibold text-neutral-600">
+                        {streak > 0 ? `${streak} daga röð` : "Engin röð"}
+                      </span>
+                      <span className="text-[11px] font-semibold text-neutral-600 tabular-nums">
+                        {points} stig
+                      </span>
+                    </div>
+                    <h4 className="text-xl font-extrabold leading-tight text-neutral-900">
+                      {child.display_name || child.first_name}
+                    </h4>
+                    <p className="mt-1.5 text-xs text-neutral-600 tabular-nums">
+                      {tasks} verkefni lokið
+                    </p>
+                  </article>
+                );
+              })}
             </div>
           )}
         </section>
 
+        {/* Detailed analytics per child */}
         {children && children.length > 0 && (
-          <section className="space-y-3">
-            <h3 className="text-lg font-bold text-neutral-900">Nánari greining</h3>
-            <div className="grid gap-6 2xl:grid-cols-2">
+          <section className="space-y-4">
+            <h3 className="text-base font-bold text-neutral-900">Nánari greining</h3>
+            <div className="grid gap-5 xl:grid-cols-1 2xl:grid-cols-2">
               {children.map((child) => {
                 const dailyRows = dailyByChild.get(child.id) ?? [];
                 const rollup7 = rollupSevenDay(dailyRows);
@@ -174,33 +215,74 @@ export default async function DashboardPage() {
         )}
       </div>
 
-      <aside className="space-y-4">
-        <section className="rounded-[26px] border border-neutral-200 bg-[#efebe8] p-5">
-          <div className="mb-4 flex items-center justify-between">
-            <Bell size={16} className="text-neutral-600" />
-            <Sparkles size={16} className="text-neutral-600" />
+      {/* ── Right aside panel ── */}
+      <aside className="space-y-4 xl:sticky xl:top-4 xl:self-start">
+        {/* Profile card */}
+        <section className="rounded-3xl border border-neutral-200/80 bg-[#efeae6] p-5">
+          <div className="mb-3 flex items-center justify-between">
+            <Bell size={15} className="text-neutral-500" />
+            <Settings size={15} className="text-neutral-500" />
           </div>
           <div className="mb-4 text-center">
-            <div className="mx-auto mb-2 h-14 w-14 rounded-full bg-gradient-to-br from-evergreen-300 to-evergreen-500" />
-            <p className="text-lg font-bold text-neutral-900">Foreldra aðgangur</p>
+            <div className="mx-auto mb-2 h-12 w-12 rounded-full bg-gradient-to-br from-evergreen-300 to-evergreen-500 ring-2 ring-white" />
+            <p className="text-sm font-bold text-neutral-900">Foreldri</p>
+            <p className="text-[11px] text-neutral-500">{children?.length ?? 0} börn skráð</p>
           </div>
-          <div className="rounded-2xl bg-white p-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Virkni vikunnar</p>
-            <p className="mt-1 text-3xl font-black text-neutral-900 tabular-nums">{totalWeeklyPoints}</p>
-            <p className="text-xs text-neutral-500">stig safnað í þessari viku</p>
-            <div className="mt-4 flex items-end gap-1.5">
-              {[42, 58, 49, 67, 54, 62, 76].map((v, i) => (
-                <div key={i} className="h-20 flex-1 rounded-full bg-neutral-100 p-0.5">
-                  <div className="w-full rounded-full bg-gradient-to-t from-evergreen-500 to-mint-300" style={{ height: `${v}%` }} />
+
+          {/* Weekly activity mini-chart */}
+          <div className="rounded-2xl bg-white p-4">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500">Virkni vikunnar</p>
+              <span className="text-[11px] text-neutral-400">Stig</span>
+            </div>
+            <p className="text-2xl font-black text-neutral-900 tabular-nums">{totalWeeklyPoints}</p>
+            <p className="text-[11px] text-neutral-500 mb-4">safnað í þessari viku</p>
+
+            {/* Bar chart — bars grow from bottom */}
+            <div className="flex items-end gap-1.5 h-24">
+              {barHeights.map((pct, i) => (
+                <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                  <div className="w-full flex flex-col justify-end h-20 rounded-full bg-neutral-100 overflow-hidden">
+                    <div
+                      className="w-full rounded-full bg-gradient-to-t from-evergreen-500 to-mint-300 transition-all"
+                      style={{ height: `${pct}%` }}
+                    />
+                  </div>
+                  <span className="text-[9px] text-neutral-400 leading-none">
+                    {WEEKDAY_LABELS[i % 7]}
+                  </span>
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Quick links */}
+        <section className="rounded-3xl border border-neutral-200/80 bg-white p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500 mb-3">Flýtileiðir</p>
+          <div className="space-y-2">
+            {[
+              { href: "/children", label: "Bæta við barni", icon: Users },
+              { href: "/tasks", label: "Stofna verkefni", icon: LayoutDashboard },
+              { href: "/rewards", label: "Verðlaunalisti", icon: Star },
+            ].map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="flex items-center gap-2.5 rounded-2xl bg-neutral-50 px-3 py-2.5 text-xs font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 transition-colors"
+              >
+                <link.icon size={14} className="text-evergreen-500 shrink-0" />
+                {link.label}
+              </a>
+            ))}
           </div>
         </section>
       </aside>
     </div>
   );
 }
+
+/* ── Local helper components ── */
 
 function MetricCard({
   label,
@@ -215,51 +297,21 @@ function MetricCard({
   icon: ReactNode;
   tone: "evergreen" | "gold" | "info" | "neutral";
 }) {
-  const tones = {
-    evergreen: "bg-evergreen-50 text-evergreen-600 border-evergreen-100",
-    gold: "bg-gold-50 text-gold-600 border-gold-100",
-    info: "bg-info-light text-info border-info/10",
-    neutral: "bg-neutral-50 text-neutral-700 border-neutral-200",
+  const iconStyles = {
+    evergreen: "bg-evergreen-50 text-evergreen-600",
+    gold: "bg-gold-50 text-gold-600",
+    info: "bg-info-light text-info",
+    neutral: "bg-neutral-100 text-neutral-600",
   };
 
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-      <div className="mb-3 flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">{label}</p>
-        <span className={`rounded-lg border px-2 py-1 ${tones[tone]}`}>{icon}</span>
+    <div className="rounded-2xl border border-neutral-200/70 bg-white/80 p-3.5">
+      <div className="mb-2 flex items-center justify-between">
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-neutral-400">{label}</p>
+        <span className={`grid place-items-center h-7 w-7 rounded-lg ${iconStyles[tone]}`}>{icon}</span>
       </div>
-      <p className="text-2xl font-extrabold text-neutral-900 tabular-nums">{value}</p>
-      <p className="text-xs text-neutral-500">{sub}</p>
+      <p className="text-xl font-extrabold text-neutral-900 tabular-nums leading-none">{value}</p>
+      <p className="mt-1 text-[11px] text-neutral-500">{sub}</p>
     </div>
-  );
-}
-
-function FeaturedChildCard({
-  childName,
-  students,
-  badge,
-  theme,
-}: {
-  childName: string;
-  students: number;
-  badge: string;
-  theme: "rose" | "mint";
-}) {
-  const shell =
-    theme === "rose"
-      ? "bg-[#f1cbcf] border-[#efbcc2]"
-      : "bg-[#d5ead9] border-[#bcdcc4]";
-
-  return (
-    <article className={`rounded-3xl border p-5 ${shell}`}>
-      <div className="mb-6 flex items-center justify-between">
-        <span className="rounded-full bg-white/80 px-2.5 py-1 text-xs font-semibold text-neutral-700">
-          {badge}
-        </span>
-        <span className="text-xs font-semibold text-neutral-600">⭐ 4.9</span>
-      </div>
-      <h4 className="text-2xl font-extrabold leading-tight text-neutral-900">{childName}</h4>
-      <p className="mt-2 text-sm text-neutral-600 tabular-nums">{students} verkefni</p>
-    </article>
   );
 }
