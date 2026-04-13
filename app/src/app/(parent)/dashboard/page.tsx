@@ -102,12 +102,12 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl bg-gradient-to-r from-evergreen-600 to-evergreen-500 px-6 py-6 text-white shadow-[0_12px_30px_rgba(26,40,34,0.18)]">
+      <div className="px-1 py-1">
         <div className="flex items-center gap-3 mb-2">
-          <LayoutDashboard size={22} className="text-gold-300" />
-          <h2 className="text-xl font-extrabold">Foreldra Dashboard</h2>
+          <LayoutDashboard size={22} className="text-evergreen-500" />
+          <h2 className="text-xl font-bold text-neutral-900">Foreldra Dashboard</h2>
         </div>
-        <p className="text-sm text-evergreen-100 max-w-2xl">
+        <p className="text-sm text-neutral-500 max-w-2xl">
           Fylgstu með virkni barna þinna, stigum, markmiðum og framförum dags og viku.
         </p>
       </div>
@@ -144,7 +144,7 @@ export default async function DashboardPage() {
       </div>
 
       {!children || children.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-neutral-200 p-8 text-center">
+        <div className="bg-white rounded-2xl p-8 text-center">
           <p className="text-neutral-500 mb-4">Engin börn skráð ennþá.</p>
           <a
             href="/children"
@@ -199,10 +199,10 @@ function MetricCard({
   };
 
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
+    <div className="rounded-2xl bg-white p-4">
       <div className="mb-3 flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">{label}</p>
-        <span className={`rounded-lg border px-2 py-1 ${tones[tone]}`}>{icon}</span>
+        <span className={`rounded-lg px-2 py-1 ${tones[tone]}`}>{icon}</span>
       </div>
       <p className="text-2xl font-extrabold text-neutral-900 tabular-nums">{value}</p>
       <p className="text-xs text-neutral-500">{sub}</p>

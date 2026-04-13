@@ -40,7 +40,7 @@ export function ChildAnalyticsCard({
   const weeklyProgress = latestWeekly?.weekly_goal_reached ? 100 : Math.min(100, rollup7.activeDays * 14);
 
   return (
-    <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
+    <div className="rounded-2xl bg-white p-6">
       <div className="mb-5 flex justify-between items-start">
         <div>
           <h3 className="text-lg font-extrabold text-neutral-900">{name}</h3>
@@ -60,13 +60,13 @@ export function ChildAnalyticsCard({
       </div>
 
       <div className="grid grid-cols-3 gap-3 text-center mb-5">
-        <div className="rounded-xl bg-neutral-50 p-3">
+        <div className="rounded-lg bg-neutral-50 p-3">
           <p className="text-xl font-extrabold text-evergreen-500 tabular-nums">
             {child.available_points}
           </p>
           <p className="text-xs text-neutral-500">Stig í pússi</p>
         </div>
-        <div className="rounded-xl bg-neutral-50 p-3">
+        <div className="rounded-lg bg-neutral-50 p-3">
           <p className="text-xl font-extrabold text-info tabular-nums">
             {child.current_streak_days}
           </p>
@@ -75,7 +75,7 @@ export function ChildAnalyticsCard({
             Röð í dag
           </p>
         </div>
-        <div className="rounded-xl bg-neutral-50 p-3">
+        <div className="rounded-lg bg-neutral-50 p-3">
           <p className="text-xl font-extrabold text-neutral-700 tabular-nums">
             {child.completed_tasks_count}
           </p>
@@ -84,7 +84,7 @@ export function ChildAnalyticsCard({
       </div>
 
       {dailyGoal != null && dailyGoal > 0 && (
-        <div className="mb-5 rounded-2xl border border-neutral-200 bg-neutral-50 p-3">
+        <div className="mb-5 rounded-lg bg-neutral-50 p-3">
           <div className="flex justify-between text-xs text-neutral-600 mb-1">
             <span className="font-medium">Markmið dagsins</span>
             <span className="tabular-nums">
@@ -245,7 +245,7 @@ function StatChip({
   icon?: ReactNode;
 }) {
   return (
-    <div className="rounded-lg bg-neutral-50 border border-neutral-100 px-3 py-2">
+    <div className="rounded-lg bg-neutral-50 px-3 py-2">
       <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
         {icon}
         {label}
@@ -276,7 +276,7 @@ function ProgressCircle({
   const stroke = tone === "gold" ? "#FFD746" : "#324F44";
 
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-3">
+    <div className="rounded-lg bg-neutral-50 p-3">
       <div className="flex items-center gap-3">
         <svg className="h-16 w-16 shrink-0 -rotate-90" viewBox="0 0 64 64" aria-hidden="true">
           <circle cx="32" cy="32" r={radius} fill="none" stroke="#ece8de" strokeWidth="7" />

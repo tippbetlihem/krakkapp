@@ -48,7 +48,7 @@ export function Sidebar() {
       <aside
         className={`
           fixed top-0 left-0 z-40 h-full w-64 bg-white border-r border-neutral-200/70
-          flex flex-col transition-transform duration-200 shadow-sm
+          flex flex-col transition-transform duration-200
           lg:translate-x-0 lg:static lg:z-auto
           ${open ? "translate-x-0" : "-translate-x-full"}
         `}
@@ -71,7 +71,7 @@ export function Sidebar() {
                   flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all
                   ${
                     isActive
-                      ? "bg-evergreen-500 text-white shadow-sm"
+                      ? "bg-evergreen-50 text-evergreen-600"
                       : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700"
                   }
                 `}
