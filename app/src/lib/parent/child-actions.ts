@@ -19,6 +19,7 @@ export async function createChild(
   formData: FormData
 ): Promise<CreateChildState> {
   const firstName = String(formData.get("first_name") ?? "").trim();
+  const displayName = String(formData.get("display_name") ?? "").trim();
   const username = String(formData.get("login_username") ?? "").trim();
   const password = String(formData.get("password") ?? "").trim();
   const password2 = String(formData.get("password_confirm") ?? "").trim();
@@ -51,7 +52,7 @@ export async function createChild(
 
   const { data, error } = await supabase.rpc("krakkapp_parent_create_child", {
     p_first_name: firstName,
-    p_display_name: firstName,
+    p_display_name: displayName || null,
     p_login_username: username,
     p_password: password,
     p_birth_date: birthDateRaw ? birthDateRaw : null,

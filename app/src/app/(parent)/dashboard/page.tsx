@@ -141,21 +141,32 @@ export default async function DashboardPage() {
 
         {/* Featured children cards */}
         <section>
-          <div className="mb-3 flex items-center justify-between">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <h3 className="text-base font-bold text-neutral-900">Börnin þín</h3>
-            <a href="/children" className="text-xs font-semibold text-neutral-400 hover:text-neutral-700 transition-colors">
-              Sjá öll &rarr;
-            </a>
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href="/children#skra-barn"
+                className="rounded-full bg-evergreen-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-evergreen-600 transition-colors"
+              >
+                Skrá barn
+              </a>
+              <a
+                href="/children"
+                className="text-xs font-semibold text-neutral-400 hover:text-neutral-700 transition-colors"
+              >
+                Sjá alla lista &rarr;
+              </a>
+            </div>
           </div>
 
           {!children || children.length === 0 ? (
             <div className="rounded-3xl border border-neutral-200 bg-white p-8 text-center">
               <p className="text-neutral-500 mb-4">Engin börn skráð ennþá.</p>
               <a
-                href="/children"
+                href="/children#skra-barn"
                 className="inline-flex items-center gap-2 bg-evergreen-500 text-white rounded-2xl px-4 py-2 font-semibold text-sm hover:bg-evergreen-600 transition-colors"
               >
-                Bæta við barni
+                Skrá barn
               </a>
             </div>
           ) : (
@@ -262,7 +273,7 @@ export default async function DashboardPage() {
           <p className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500 mb-3">Flýtileiðir</p>
           <div className="space-y-2">
             {[
-              { href: "/children", label: "Bæta við barni", icon: Users },
+              { href: "/children#skra-barn", label: "Skrá barn", icon: Users },
               { href: "/tasks", label: "Stofna verkefni", icon: LayoutDashboard },
               { href: "/rewards", label: "Verðlaunalisti", icon: Star },
             ].map((link) => (
