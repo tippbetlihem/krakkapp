@@ -18,13 +18,15 @@ export default async function ParentLayout({
   }
 
   return (
-    <div className="flex h-full bg-[#f6f7fb]">
-      <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0 lg:pl-2">
-        <TopBar email={user.email} />
-        <main className="flex-1 overflow-y-auto px-4 pb-6 pt-4 sm:px-6 lg:px-8">
-          <div className="mx-auto w-full max-w-6xl">{children}</div>
-        </main>
+    <div className="h-full bg-[#a7d8c8] p-3 md:p-5">
+      <div className="flex h-full rounded-[28px] bg-[#f7f5f2] border border-white/70 overflow-hidden">
+        <Sidebar />
+        <div className="flex-1 flex flex-col min-w-0">
+          <TopBar email={user.email} />
+          <main className="flex-1 overflow-y-auto px-4 pb-6 sm:px-6 lg:px-8">
+            <div className="mx-auto w-full max-w-7xl">{children}</div>
+          </main>
+        </div>
       </div>
     </div>
   );
