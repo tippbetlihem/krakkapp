@@ -37,14 +37,15 @@ export function ChildAnalyticsCard({
     dailyGoal && dailyGoal > 0
       ? Math.min(100, Math.round((todayPoints / dailyGoal) * 100))
       : null;
+  const weeklyProgress = latestWeekly?.weekly_goal_reached ? 100 : Math.min(100, rollup7.activeDays * 14);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6">
-      <div className="flex justify-between items-start mb-4">
+    <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="mb-5 flex justify-between items-start">
         <div>
-          <h3 className="text-lg font-semibold text-neutral-900">{name}</h3>
+          <h3 className="text-lg font-extrabold text-neutral-900">{name}</h3>
           {child.last_activity_at && (
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-neutral-400 mt-1">
               Síðast virkt:{" "}
               {new Date(child.last_activity_at).toLocaleString("is-IS", {
                 dateStyle: "medium",
@@ -53,20 +54,20 @@ export function ChildAnalyticsCard({
             </p>
           )}
         </div>
-        <span className="bg-success-light text-success text-xs font-medium px-2 py-0.5 rounded-full">
+        <span className="bg-success-light text-success text-xs font-semibold px-2.5 py-1 rounded-full">
           Virk/ur
         </span>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 text-center mb-5">
-        <div>
-          <p className="text-xl font-bold text-evergreen-500 tabular-nums">
+      <div className="grid grid-cols-3 gap-3 text-center mb-5">
+        <div className="rounded-xl bg-neutral-50 p-3">
+          <p className="text-xl font-extrabold text-evergreen-500 tabular-nums">
             {child.available_points}
           </p>
           <p className="text-xs text-neutral-500">Stig í pússi</p>
         </div>
-        <div>
-          <p className="text-xl font-bold text-info tabular-nums">
+        <div className="rounded-xl bg-neutral-50 p-3">
+          <p className="text-xl font-extrabold text-info tabular-nums">
             {child.current_streak_days}
           </p>
           <p className="text-xs text-neutral-500 flex items-center justify-center gap-0.5">
@@ -74,8 +75,8 @@ export function ChildAnalyticsCard({
             Röð í dag
           </p>
         </div>
-        <div>
-          <p className="text-xl font-bold text-neutral-700 tabular-nums">
+        <div className="rounded-xl bg-neutral-50 p-3">
+          <p className="text-xl font-extrabold text-neutral-700 tabular-nums">
             {child.completed_tasks_count}
           </p>
           <p className="text-xs text-neutral-500">Verkefni (alls)</p>
@@ -83,14 +84,14 @@ export function ChildAnalyticsCard({
       </div>
 
       {dailyGoal != null && dailyGoal > 0 && (
-        <div className="mb-5">
+        <div className="mb-5 rounded-2xl border border-neutral-200 bg-neutral-50 p-3">
           <div className="flex justify-between text-xs text-neutral-600 mb-1">
             <span className="font-medium">Markmið dagsins</span>
             <span className="tabular-nums">
               {todayPoints} / {dailyGoal} stig
             </span>
           </div>
-          <div className="h-2 bg-neutral-200 rounded-full overflow-hidden">
+          <div className="h-2.5 bg-neutral-200 rounded-full overflow-hidden">
             <div
               className="h-full bg-gold-400 rounded-full transition-[width]"
               style={{ width: `${goalPct ?? 0}%` }}
@@ -160,6 +161,21 @@ export function ChildAnalyticsCard({
         )}
       </div>
 
+      <div className="mb-4 grid grid-cols-2 gap-3">
+        <ProgressCircle
+          label="Daglegt markmið"
+          value={goalPct ?? 0}
+          sub={`${todayPoints}/${dailyGoal ?? 0} stig`}
+          tone="gold"
+        />
+        <ProgressCircle
+          label="Vikutaktur"
+          value={weeklyProgress}
+          sub={`${rollup7.activeDays} virkir dagar`}
+          tone="evergreen"
+        />
+      </div>
+
       <div className="border-t border-neutral-100 pt-3 text-xs text-neutral-500 space-y-1">
         <p>
           Ævisögustig:{" "}
@@ -186,7 +202,7 @@ export function ChildAnalyticsCard({
       </div>
 
       {latestWeekly && (
-        <div className="mt-4 rounded-md bg-evergreen-50 border border-evergreen-100 px-3 py-2.5 text-xs text-neutral-700">
+        <div className="mt-4 rounded-xl bg-evergreen-50 border border-evergreen-100 px-3 py-2.5 text-xs text-neutral-700">
           <p className="font-semibold text-evergreen-600 mb-1">Síðasta skráða vika</p>
           <p>
             {new Date(latestWeekly.week_start_date).toLocaleDateString("is-IS")}
@@ -238,6 +254,50 @@ function StatChip({
         {value}
       </p>
       <p className="text-[11px] text-neutral-500">{sub}</p>
+    </div>
+  );
+}
+
+function ProgressCircle({
+  label,
+  value,
+  sub,
+  tone,
+}: {
+  label: string;
+  value: number;
+  sub: string;
+  tone: "gold" | "evergreen";
+}) {
+  const normalized = Math.max(0, Math.min(100, value));
+  const radius = 24;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (normalized / 100) * circumference;
+  const stroke = tone === "gold" ? "#FFD746" : "#324F44";
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-3">
+      <div className="flex items-center gap-3">
+        <svg className="h-16 w-16 shrink-0 -rotate-90" viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r={radius} fill="none" stroke="#ece8de" strokeWidth="7" />
+          <circle
+            cx="32"
+            cy="32"
+            r={radius}
+            fill="none"
+            stroke={stroke}
+            strokeWidth="7"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+          />
+        </svg>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">{label}</p>
+          <p className="text-lg font-extrabold text-neutral-900 tabular-nums">{normalized}%</p>
+          <p className="text-[11px] text-neutral-500">{sub}</p>
+        </div>
+      </div>
     </div>
   );
 }

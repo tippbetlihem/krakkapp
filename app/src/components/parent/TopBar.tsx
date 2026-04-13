@@ -14,21 +14,26 @@ export function TopBar({ email }: { email?: string }) {
   }
 
   return (
-    <header className="h-14 bg-evergreen-500 text-white flex items-center justify-between px-5 lg:px-8">
+    <header className="h-20 border-b border-neutral-200/80 bg-white flex items-center justify-between px-5 lg:px-8">
       <div className="lg:hidden w-8" />
-      <div className="hidden lg:block" />
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-400">
+          Foreldragátt
+        </p>
+        <h1 className="text-lg font-extrabold text-neutral-900">Yfirlit fjölskyldu</h1>
+      </div>
       <div className="flex items-center gap-4">
         {email && (
-          <span className="text-sm text-evergreen-200 flex items-center gap-1.5">
-            <User size={14} />
+          <span className="text-sm text-neutral-500 flex items-center gap-1.5">
+            <User size={14} className="text-evergreen-500" />
             {email}
           </span>
         )}
         <button
           onClick={handleLogout}
-          className="text-sm text-evergreen-200 hover:text-white flex items-center gap-1.5 transition-colors"
+          className="text-sm text-neutral-500 hover:text-neutral-900 flex items-center gap-1.5 transition-colors"
         >
-          <LogOut size={14} />
+          <LogOut size={14} className="text-evergreen-500" />
           Útskrá
         </button>
       </div>

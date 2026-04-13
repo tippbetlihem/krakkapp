@@ -47,19 +47,19 @@ export function Sidebar() {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 z-40 h-full w-56 bg-neutral-100 border-r border-neutral-200
-          flex flex-col transition-transform duration-200
+          fixed top-0 left-0 z-40 h-full w-64 bg-white border-r border-neutral-200/70
+          flex flex-col transition-transform duration-200 shadow-sm
           lg:translate-x-0 lg:static lg:z-auto
           ${open ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="h-14 flex items-center px-5 border-b border-neutral-200">
-          <Link href="/dashboard" className="text-lg font-extrabold text-evergreen-500">
+        <div className="h-20 flex items-center px-6 border-b border-neutral-200/70">
+          <Link href="/dashboard" className="text-2xl font-extrabold text-evergreen-600">
             Krakk<span className="text-gold-400">App</span>
           </Link>
         </div>
 
-        <nav className="flex-1 py-4 px-3 space-y-1">
+        <nav className="flex-1 py-5 px-4 space-y-1.5">
           {navItems.map((item) => {
             const isActive = pathname.startsWith(item.href);
             return (
@@ -68,11 +68,11 @@ export function Sidebar() {
                 href={item.href}
                 onClick={() => setOpen(false)}
                 className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors
+                  flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all
                   ${
                     isActive
-                      ? "bg-evergreen-50 text-evergreen-500"
-                      : "text-neutral-500 hover:bg-neutral-200 hover:text-neutral-700"
+                      ? "bg-evergreen-500 text-white shadow-sm"
+                      : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700"
                   }
                 `}
               >

@@ -150,3 +150,12 @@ body {
   color: var(--neutral-700);
   font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
 }
+
+@layer components {
+  .parent-surface {
+    border: 1px solid color-mix(in oklab, var(--neutral-200) 80%, transparent);
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(26, 25, 24, 0.05);
+  }
+}
