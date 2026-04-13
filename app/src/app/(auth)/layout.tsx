@@ -60,7 +60,7 @@ export default function AuthLayout({
           {/* Mascots — overflow into white area */}
           <div className="absolute -bottom-4 -left-20 z-30 flex items-end">
             {/* Green mascot — in front */}
-            <div className="w-80 h-80 relative z-20 animate-[float2_8s_ease-in-out_infinite]">
+            <div className="w-120 h-120 relative z+20 animate-[float2_8s_ease-in-out_infinite]">
               <Image
                 src="/mascots/green.png"
                 alt="KrakkApp mascot"
