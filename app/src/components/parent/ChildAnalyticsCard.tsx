@@ -39,7 +39,7 @@ export function ChildAnalyticsCard({
       : null;
 
   return (
-    <div className="bg-white rounded-lg shadow border border-neutral-200 p-6">
+    <div className="bg-white rounded-2xl shadow-sm p-6">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-neutral-900">{name}</h3>
@@ -60,7 +60,7 @@ export function ChildAnalyticsCard({
 
       <div className="grid grid-cols-3 gap-4 text-center mb-5">
         <div>
-          <p className="text-xl font-bold text-navy-500 tabular-nums">
+          <p className="text-xl font-bold text-evergreen-500 tabular-nums">
             {child.available_points}
           </p>
           <p className="text-xs text-neutral-500">Stig í pússi</p>
@@ -101,7 +101,7 @@ export function ChildAnalyticsCard({
 
       <div className="border-t border-neutral-100 pt-4 mb-4">
         <div className="flex items-center gap-2 text-sm font-bold text-neutral-800 mb-3">
-          <TrendingUp size={18} className="text-navy-500" />
+          <TrendingUp size={18} className="text-evergreen-500" />
           Síðustu 7 dagar
         </div>
         {!rollup7.hasAnyRow ? (
@@ -129,7 +129,7 @@ export function ChildAnalyticsCard({
                   ? `Meðalnákvæmni ${formatPercent(rollup7.mathAccuracy)}`
                   : "Engar lotur"
               }
-              icon={<Calculator size={14} className="text-navy-500" />}
+              icon={<Calculator size={14} className="text-evergreen-500" />}
             />
             <StatChip
               label="Lestur"
@@ -139,13 +139,13 @@ export function ChildAnalyticsCard({
                   ? `Meðalnákvæmni ${formatPercent(rollup7.readingAccuracy)}`
                   : "Engar lotur"
               }
-              icon={<BookOpen size={14} className="text-navy-500" />}
+              icon={<BookOpen size={14} className="text-evergreen-500" />}
             />
             <StatChip
               label="Verkefni lokið"
               value={`${rollup7.tasksCompleted}`}
               sub="á 7 dögum"
-              icon={<ClipboardCheck size={14} className="text-navy-500" />}
+              icon={<ClipboardCheck size={14} className="text-evergreen-500" />}
             />
             <StatChip
               label="Virkni"
@@ -186,8 +186,8 @@ export function ChildAnalyticsCard({
       </div>
 
       {latestWeekly && (
-        <div className="mt-4 rounded-md bg-navy-50 border border-navy-100 px-3 py-2.5 text-xs text-neutral-700">
-          <p className="font-semibold text-navy-600 mb-1">Síðasta skráða vika</p>
+        <div className="mt-4 rounded-md bg-evergreen-50 border border-evergreen-100 px-3 py-2.5 text-xs text-neutral-700">
+          <p className="font-semibold text-evergreen-600 mb-1">Síðasta skráða vika</p>
           <p>
             {new Date(latestWeekly.week_start_date).toLocaleDateString("is-IS")}
             {" — "}

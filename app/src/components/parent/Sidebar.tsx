@@ -8,7 +8,6 @@ import {
   ClipboardCheck,
   Gift,
   Settings,
-  Zap,
   Menu,
   X,
 } from "lucide-react";
@@ -31,7 +30,7 @@ export function Sidebar() {
       {/* Mobile toggle */}
       <button
         onClick={() => setOpen(!open)}
-        className="lg:hidden fixed top-3 left-3 z-50 p-2 rounded-md bg-white shadow-md text-navy-500"
+        className="lg:hidden fixed top-3 left-3 z-50 p-2 rounded-xl bg-white shadow-md text-evergreen-500"
         aria-label="Toggle menu"
       >
         {open ? <X size={20} /> : <Menu size={20} />}
@@ -55,7 +54,7 @@ export function Sidebar() {
         `}
       >
         <div className="h-14 flex items-center px-5 border-b border-neutral-200">
-          <Link href="/dashboard" className="text-lg font-bold text-navy-500">
+          <Link href="/dashboard" className="text-lg font-extrabold text-evergreen-500">
             Krakk<span className="text-gold-400">App</span>
           </Link>
         </div>
@@ -69,11 +68,11 @@ export function Sidebar() {
                 href={item.href}
                 onClick={() => setOpen(false)}
                 className={`
-                  flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors
+                  flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors
                   ${
                     isActive
-                      ? "bg-navy-50 text-navy-500"
-                      : "text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800"
+                      ? "bg-evergreen-50 text-evergreen-500"
+                      : "text-neutral-500 hover:bg-neutral-200 hover:text-neutral-700"
                   }
                 `}
               >

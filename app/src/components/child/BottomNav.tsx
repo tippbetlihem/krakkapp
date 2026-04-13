@@ -24,10 +24,10 @@ export function BottomNav() {
               key={tab.href}
               href={tab.href}
               className={`
-                flex-1 flex flex-col items-center gap-0.5 py-2 text-xs font-semibold transition-colors
+                flex-1 flex flex-col items-center gap-0.5 py-2.5 text-xs font-semibold transition-colors
                 ${
                   isActive
-                    ? "text-navy-500 border-t-2 border-gold-400"
+                    ? "text-evergreen-500 border-t-2 border-gold-400"
                     : "text-neutral-400 border-t-2 border-transparent"
                 }
               `}

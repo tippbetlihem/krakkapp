@@ -4,10 +4,10 @@ export default function RewardsPage() {
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
-        <Gift size={24} className="text-navy-500" />
+        <Gift size={24} className="text-evergreen-500" />
         <h1 className="text-2xl font-bold text-neutral-900">Verðlaun</h1>
       </div>
-      <div className="bg-white rounded-lg shadow border border-neutral-200 p-8 text-center text-neutral-500">
+      <div className="bg-white rounded-2xl shadow-sm p-8 text-center text-neutral-500">
         Kemur bráðlega
       </div>
     </div>

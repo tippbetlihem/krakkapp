@@ -88,7 +88,7 @@ export default async function DashboardPage() {
   return (
     <div>
       <div className="flex items-center gap-3 mb-2">
-        <LayoutDashboard size={24} className="text-navy-500" />
+        <LayoutDashboard size={24} className="text-evergreen-500" />
         <h1 className="text-2xl font-bold text-neutral-900">Yfirlit</h1>
       </div>
       <p className="text-sm text-neutral-500 mb-6 max-w-2xl">
@@ -97,11 +97,11 @@ export default async function DashboardPage() {
       </p>
 
       {!children || children.length === 0 ? (
-        <div className="bg-white rounded-lg shadow border border-neutral-200 p-8 text-center">
+        <div className="bg-white rounded-2xl shadow-sm p-8 text-center">
           <p className="text-neutral-500 mb-4">Engin börn skráð ennþá.</p>
           <a
             href="/children"
-            className="inline-flex items-center gap-2 bg-navy-500 text-white rounded-md px-4 py-2 font-semibold text-sm hover:bg-navy-600 transition-colors"
+            className="inline-flex items-center gap-2 bg-evergreen-500 text-white rounded-2xl px-4 py-2 font-semibold text-sm hover:bg-evergreen-600 transition-colors"
           >
             Bæta við barni
           </a>
