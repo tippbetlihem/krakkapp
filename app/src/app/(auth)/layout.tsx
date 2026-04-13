@@ -57,26 +57,24 @@ export default function AuthLayout({
             </div>
           </div>
 
-          {/* Mascots — overflow into white area */}
-          <div className="absolute -bottom-4 -left-20 z-30 flex items-end">
-            {/* Green mascot — in front */}
-            <div className="w-[480px] h-[480px] relative z-20 animate-[float2_8s_ease-in-out_infinite]">
-              <Image
-                src="/mascots/green.png"
-                alt="KrakkApp mascot"
-                fill
-                className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
-              />
-            </div>
-            {/* Orange mascot — behind, offset right */}
-            <div className="w-72 h-72 relative z-10 -ml-16 mb-4 animate-[float1_7s_ease-in-out_infinite]">
-              <Image
-                src="/mascots/orange.png"
-                alt="KrakkApp mascot"
-                fill
-                className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
-              />
-            </div>
+          {/* Mascots — overflow into white area, above tagline */}
+          {/* Green mascot — in front, far left */}
+          <div className="absolute -bottom-6 -left-36 z-30 w-[480px] h-[480px] animate-[float2_8s_ease-in-out_infinite]">
+            <Image
+              src="/mascots/green.png"
+              alt="KrakkApp mascot"
+              fill
+              className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
+            />
+          </div>
+          {/* Orange mascot — behind green, overlapping */}
+          <div className="absolute -bottom-2 left-24 z-20 w-[360px] h-[360px] animate-[float1_7s_ease-in-out_infinite]">
+            <Image
+              src="/mascots/orange.png"
+              alt="KrakkApp mascot"
+              fill
+              className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
+            />
           </div>
         </div>
       </div>
