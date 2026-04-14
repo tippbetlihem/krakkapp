@@ -62,7 +62,7 @@ CREATE OR REPLACE FUNCTION public.krakkapp_child_login(p_username TEXT, p_passwo
 RETURNS JSONB
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, extensions
 AS $$
 DECLARE
   v_child public.children%ROWTYPE;
@@ -129,7 +129,7 @@ CREATE OR REPLACE FUNCTION public.krakkapp_parent_create_child(
 RETURNS JSONB
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, extensions
 AS $$
 DECLARE
   v_id UUID;
@@ -192,7 +192,7 @@ CREATE OR REPLACE FUNCTION public.krakkapp_child_session_profile(p_token TEXT)
 RETURNS JSONB
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, extensions
 AS $$
 DECLARE
   v_child public.children%ROWTYPE;
@@ -236,7 +236,7 @@ CREATE OR REPLACE FUNCTION public.krakkapp_child_logout(p_token TEXT)
 RETURNS JSONB
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, extensions
 AS $$
 BEGIN
   DELETE FROM public.child_auth_sessions WHERE token = p_token;

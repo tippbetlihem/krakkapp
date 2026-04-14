@@ -60,9 +60,7 @@ export async function createChild(
 
   if (error) {
     const msg = error.message ?? "";
-    const code = (error as { code?: string }).code ?? "";
-    // DEBUG: sýna raunverulega villu frá Supabase
-    return { error: `DEBUG: code=${code} message=${msg}` };
+    return { error: msg || "Ekki tokst ad bua til barn." };
   }
 
   const result = data as CreateChildRpc;
