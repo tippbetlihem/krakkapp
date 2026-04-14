@@ -30,7 +30,7 @@ export default async function ChildrenPage() {
           <strong className="text-neutral-800">Hér skráir þú börnin:</strong> byrjaðu á forminu{" "}
           <strong>„Skrá nýtt barn“</strong> fyrir neðan (nafn, fæðingardagur, notendanafn, lykilorð).
           Síðan skráir barnið sig inn á{" "}
-          <Link href="/child/login" className="font-semibold text-evergreen-600 hover:underline">
+          <Link href="/login?mode=child" className="font-semibold text-evergreen-600 hover:underline">
             barnainnskráningu
           </Link>
           .
@@ -51,8 +51,8 @@ export default async function ChildrenPage() {
               const name = c.display_name || c.first_name;
               const uname = c.login_username?.trim();
               const loginUrl = uname
-                ? `/child/login?u=${encodeURIComponent(uname)}`
-                : "/child/login";
+                ? `/login?mode=child&u=${encodeURIComponent(uname)}`
+                : "/login?mode=child";
               const ageHint =
                 c.birth_year != null
                   ? `Fætt/ur ~${c.birth_year}`

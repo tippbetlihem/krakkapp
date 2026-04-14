@@ -8,7 +8,7 @@ export default async function ProtectedChildLayout({
 }) {
   const profile = await getChildProfileForRequest();
   if (!profile) {
-    redirect("/child/login");
+    redirect("/login?mode=child");
   }
   return <>{children}</>;
 }

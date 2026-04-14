@@ -14,5 +14,5 @@ export async function POST(request: NextRequest) {
 
   jar.set(CHILD_SESSION_COOKIE, "", { path: "/", maxAge: 0 });
 
-  return NextResponse.redirect(new URL("/child/login", request.url));
+  return NextResponse.redirect(new URL("/login?mode=child", request.url));
 }

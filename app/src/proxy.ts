@@ -37,16 +37,29 @@ export async function proxy(request: NextRequest) {
   const isChildAppPath =
     pathname === "/child" || pathname.startsWith("/child/");
 
-  if (pathname === "/child") {
+  if (pathname === "/child/login") {
     const url = request.nextUrl.clone();
-    url.pathname = hasChildSession ? "/child/home" : "/child/login";
+    url.pathname = "/login";
+    url.searchParams.set("mode", "child");
     return NextResponse.redirect(url);
   }
 
-  if (isChildAppPath && !pathname.startsWith("/child/login")) {
+  if (pathname === "/child") {
+    const url = request.nextUrl.clone();
+    if (hasChildSession) {
+      url.pathname = "/child/home";
+    } else {
+      url.pathname = "/login";
+      url.searchParams.set("mode", "child");
+    }
+    return NextResponse.redirect(url);
+  }
+
+  if (isChildAppPath) {
     if (!hasChildSession) {
       const url = request.nextUrl.clone();
-      url.pathname = "/child/login";
+      url.pathname = "/login";
+      url.searchParams.set("mode", "child");
       return NextResponse.redirect(url);
     }
   }
