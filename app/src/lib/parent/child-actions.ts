@@ -59,22 +59,10 @@ export async function createChild(
   });
 
   if (error) {
-    const msg = error.message ?? "";
-    const code = (error as { code?: string }).code ?? "";
-    const missingRpc =
-      /function .* does not exist|PGRST202|schema cache|Could not find the function/i.test(
-        msg + " " + code
-      );
-    if (missingRpc) {
-      return {
-        error:
-          "Gagnagrunnurinn þekkir ekki barna-fallið krakkapp_parent_create_child. " +
-          "1) Opnaðu Supabase → SQL → límdu inn ALLA skrána „SQL sem er inná supabase/04_barna_innskraning.sql“ og keyrðu (eða supabase db push). " +
-          "2) Ef þú gerðir þetta þegar: Project settings → API → „Reload schema“ (eða bíddu 1–2 mín.). " +
-          "3) Athugaðu að Vercel/.env noti sama Supabase-verkefni og þú keyrir SQL á.",
-      };
-    }
-    return { error: msg || "Ekki tókst að búa til barn." };
+    const msg = error.message ?? “”;
+    const code = (error as { code?: string }).code ?? “”;
+    // DEBUG: sýna raunverulega villu frá Supabase
+    return { error: `DEBUG: code=${code} message=${msg}` };
   }
 
   const result = data as CreateChildRpc;
