@@ -276,14 +276,20 @@ function LoginPageInner() {
             </div>
           </div>
 
-          {/* Mascots */}
-          <div className={`absolute -bottom-24 -left-28 z-20 w-[430px] h-[430px] transition-all duration-500
-            ${mode === "child" ? "opacity-100 translate-y-0" : "opacity-40 translate-y-8"}`}>
+          {/* Mascots — active mode mascot is larger and in front */}
+          <div className={`absolute transition-all duration-500 ease-out
+            ${mode === "parent"
+              ? "-bottom-24 -left-28 z-30 w-[430px] h-[430px] opacity-100 translate-y-0"
+              : "-bottom-16 -left-18 z-20 w-[340px] h-[340px] opacity-75 translate-y-3"
+            }`}>
             <Image src="/mascots/green.png" alt="" fill
               className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]" />
           </div>
-          <div className={`absolute -bottom-12 left-20 z-30 w-[340px] h-[340px] transition-all duration-500
-            ${mode === "child" ? "opacity-100 translate-y-0" : "opacity-40 translate-y-8"}`}>
+          <div className={`absolute transition-all duration-500 ease-out
+            ${mode === "child"
+              ? "-bottom-12 left-16 z-30 w-[390px] h-[390px] opacity-100 translate-y-0"
+              : "-bottom-10 left-26 z-20 w-[300px] h-[300px] opacity-75 translate-y-3"
+            }`}>
             <Image src="/mascots/orange.png" alt="" fill
               className="object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.25)]" />
           </div>
