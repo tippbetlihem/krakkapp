@@ -59,8 +59,8 @@ export async function createChild(
   });
 
   if (error) {
-    const msg = error.message ?? “”;
-    const code = (error as { code?: string }).code ?? “”;
+    const msg = error.message ?? "";
+    const code = (error as { code?: string }).code ?? "";
     // DEBUG: sýna raunverulega villu frá Supabase
     return { error: `DEBUG: code=${code} message=${msg}` };
   }
