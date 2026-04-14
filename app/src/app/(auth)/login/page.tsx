@@ -40,7 +40,7 @@ function LoginPageInner() {
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      setError("Rangt netfang eda lykilord");
+      setError("Rangt netfang eða lykilorð");
       setLoading(false);
       return;
     }
@@ -51,8 +51,8 @@ function LoginPageInner() {
     e.preventDefault();
     setError("");
     const u = username.trim();
-    if (u.length < 2) { setError("Slaou inn notendanafn."); return; }
-    if (!childPassword) { setError("Slaou inn lykilord."); return; }
+    if (u.length < 2) { setError("Sláðu inn notendanafn."); return; }
+    if (!childPassword) { setError("Sláðu inn lykilorð."); return; }
     setLoading(true);
     const res = await fetch("/api/child/login", {
       method: "POST",
@@ -63,9 +63,9 @@ function LoginPageInner() {
     if (!res.ok) {
       const body = (await res.json().catch(() => ({}))) as { error?: string };
       if (body.error === "invalid_credentials" || body.error === "invalid_username") {
-        setError("Rangt notendanafn eda lykilord.");
+        setError("Rangt notendanafn eða lykilorð.");
       } else {
-        setError("Ekki tokst ad skra inn. Reyndu aftur.");
+        setError("Ekki tókst að skrá inn. Reyndu aftur.");
       }
       return;
     }
@@ -131,7 +131,7 @@ function LoginPageInner() {
                 <form onSubmit={handleParentLogin} className="space-y-5">
                   <div>
                     <h2 className="text-xl font-extrabold text-neutral-900">Velkomin!</h2>
-                    <p className="text-sm text-neutral-500 mt-1">Skraou thig inn sem foreldri</p>
+                    <p className="text-sm text-neutral-500 mt-1">Skráðu þig inn sem foreldri</p>
                   </div>
 
                   {error && mode === "parent" && (
@@ -149,7 +149,7 @@ function LoginPageInner() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-neutral-700 mb-2">Lykilord</label>
+                    <label className="block text-sm font-semibold text-neutral-700 mb-2">Lykilorð</label>
                     <input
                       type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                       placeholder="--------" required
@@ -164,15 +164,15 @@ function LoginPageInner() {
                       hover:bg-evergreen-600 active:translate-y-px disabled:opacity-50
                       flex items-center justify-center gap-2 transition-all">
                     <LogIn size={18} />
-                    {loading ? "Skrai inn..." : "Skra inn"}
+                    {loading ? "Skrái inn..." : "Skrá inn"}
                   </button>
 
                   <div className="flex items-center justify-between text-sm">
                     <Link href="/forgot-password" className="text-evergreen-400 hover:text-evergreen-500 font-semibold">
-                      Gleymt lykilord?
+                      Gleymt lykilorð?
                     </Link>
                     <Link href="/signup" className="text-evergreen-500 font-bold hover:text-gold-500 flex items-center gap-1">
-                      Nyskra <ChevronRight size={14} />
+                      Nýskrá <ChevronRight size={14} />
                     </Link>
                   </div>
                 </form>
@@ -183,9 +183,9 @@ function LoginPageInner() {
                 <form onSubmit={handleChildLogin} className="space-y-5">
                   <div>
                     <h2 className="text-xl font-extrabold text-neutral-900 flex items-center gap-2">
-                      <Sparkles size={20} className="text-gold-400" /> Hae!
+                      <Sparkles size={20} className="text-gold-400" /> Hæ!
                     </h2>
-                    <p className="text-sm text-neutral-500 mt-1">Skraou thig inn med notendanafni</p>
+                    <p className="text-sm text-neutral-500 mt-1">Skráðu þig inn með notendanafni</p>
                   </div>
 
                   {error && mode === "child" && (
@@ -193,7 +193,7 @@ function LoginPageInner() {
                   )}
 
                   <div>
-                    <label className="block text-sm font-semibold text-neutral-700 mb-2">Notendanafn</label>
+                    <label className="block text-sm font-semibold text-neutral-700 mb-2">Notandanafn</label>
                     <input
                       type="text" value={username} onChange={(e) => setUsername(e.target.value)}
                       placeholder="t.d. anna_krakki" required autoComplete="username" spellCheck={false}
@@ -203,7 +203,7 @@ function LoginPageInner() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-neutral-700 mb-2">Lykilord</label>
+                    <label className="block text-sm font-semibold text-neutral-700 mb-2">Lykilorð</label>
                     <input
                       type="password" value={childPassword} onChange={(e) => setChildPassword(e.target.value)}
                       placeholder="--------" required autoComplete="current-password"
@@ -218,7 +218,7 @@ function LoginPageInner() {
                       hover:bg-gold-500 active:translate-y-px disabled:opacity-50
                       flex items-center justify-center gap-2 transition-all shadow-sm">
                     <Sparkles size={18} />
-                    {loading ? "Skrai inn..." : "Skra inn"}
+                    {loading ? "Skrái inn..." : "Skrá inn"}
                   </button>
                 </form>
               </div>
@@ -247,13 +247,13 @@ function LoginPageInner() {
             <div>
               <p className={`text-xs font-bold uppercase tracking-widest mb-2 transition-colors duration-500
                 ${mode === "parent" ? "text-gold-300" : "text-white/70"}`}>
-                {mode === "parent" ? "Fyrir foreldra" : "Fyrir born"}
+                {mode === "parent" ? "Fyrir foreldra" : "Fyrir börn"}
               </p>
               <h2 className="text-white text-2xl font-extrabold leading-snug">
                 {mode === "parent" ? (
-                  <>Fylgstu med<br />framforunum.</>
+                  <>Fylgstu með<br />framförunum.</>
                 ) : (
-                  <>Laera, vinna<br />og hafa gaman!</>
+                  <>Læra, vinna<br />og hafa gaman!</>
                 )}
               </h2>
             </div>
@@ -271,7 +271,7 @@ function LoginPageInner() {
               </div>
               <p className={`text-xs transition-colors duration-500
                 ${mode === "parent" ? "text-evergreen-200" : "text-white/60"}`}>
-                Staerdfraedi · Lestur · Verkefni · Verdlaun
+                Stærðfræði · Lestur · Verkefni · Verðlaun
               </p>
             </div>
           </div>
