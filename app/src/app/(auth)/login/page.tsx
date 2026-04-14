@@ -269,10 +269,6 @@ function LoginPageInner() {
                 <div className={`w-7 h-7 rounded-full border-2 transition-colors duration-500
                   ${mode === "parent" ? "bg-mint-300 border-evergreen-600" : "bg-evergreen-400 border-citrus-500"}`} />
               </div>
-              <p className={`text-xs transition-colors duration-500
-                ${mode === "parent" ? "text-evergreen-200" : "text-white/60"}`}>
-                Stærðfræði · Lestur · Verkefni · Verðlaun
-              </p>
             </div>
           </div>
 
