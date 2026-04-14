@@ -260,7 +260,7 @@ function LoginPageInner() {
 
             <div className="flex-1" />
 
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <div className="flex -space-x-2">
                 <div className={`w-7 h-7 rounded-full border-2 transition-colors duration-500
                   ${mode === "parent" ? "bg-gold-400 border-evergreen-600" : "bg-white border-citrus-500"}`} />
@@ -269,7 +269,7 @@ function LoginPageInner() {
                 <div className={`w-7 h-7 rounded-full border-2 transition-colors duration-500
                   ${mode === "parent" ? "bg-mint-300 border-evergreen-600" : "bg-evergreen-400 border-citrus-500"}`} />
               </div>
-            </div>
+            </div>*/}
           </div>
 
           {/* Mascots — active mode mascot is larger and in front */}
