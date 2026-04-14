@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AuthCard } from "@/components/auth/AuthCard";
 import { createClient } from "@/lib/supabase/client";
 import { UserPlus } from "lucide-react";
 
@@ -52,6 +53,7 @@ export default function SignupPage() {
   }
 
   return (
+    <AuthCard>
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <h2 className="text-2xl font-extrabold text-neutral-900">Nýskráning</h2>
@@ -147,5 +149,6 @@ export default function SignupPage() {
         </Link>
       </p>
     </form>
+    </AuthCard>
   );
 }
